@@ -76,7 +76,7 @@ public class Game {
   }
 
   /**
-   * Get the minimum power of this game - minimum number of red, green and blue cubes multipled.
+   * Get the minimum power of this game - minimum number of red, green and blue cubes multiplied.
    *
    * @return The minimum power of the game.
    */
