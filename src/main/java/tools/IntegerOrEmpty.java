@@ -12,23 +12,31 @@ public class IntegerOrEmpty {
   public static final IntegerOrEmpty empty = new IntegerOrEmpty(null);
 
 
-  private IntegerOrEmpty(Long value) {
+  /**
+   * Create an instance.
+   *
+   * @param value The value to use, it can be null
+   */
+  public IntegerOrEmpty(Long value) {
     this.value = value;
   }
 
   /**
-   * Create an object from a given integer value.
+   * Create an integer object from a given string value.
    *
-   * @param value The integer value
-   * @return An object representing the given integer value
-   * @throws NumberFormatException When the provided value is null
+   * @param value The integer value represented as a string
+   * @return An object representing the given integer value, null if it could not be parsed
+   *     as a valid integer.
    */
-  public static IntegerOrEmpty fromValue(Long value) throws NumberFormatException {
-    if (value == null) {
-      throw new NumberFormatException("Value must be non-null");
+  public static IntegerOrEmpty fromString(String value) {
+    IntegerOrEmpty i;
+    try {
+      i = new IntegerOrEmpty(Long.parseLong(value));
+    } catch (NumberFormatException e) {
+      Logger.error("Invalid number format: " + value);
+      i = IntegerOrEmpty.empty;
     }
-
-    return new IntegerOrEmpty(value);
+    return i;
   }
 
   /**
@@ -44,13 +52,8 @@ public class IntegerOrEmpty {
    * Get the value.
    *
    * @return The integer value.
-   * @throws NumberFormatException if there is no value to return
    */
-  public Long getValue() throws NumberFormatException {
-    if (value == null) {
-      throw new NumberFormatException("No value to return!");
-    }
-
+  public Long getValue() {
     return value;
   }
 }

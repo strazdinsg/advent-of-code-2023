@@ -47,7 +47,7 @@ public class InputFile {
    */
   public IntegerOrEmpty readLineAsInteger() {
     String value = readLineAndDetectEnd();
-    return value != null ? convertToInt(value) : IntegerOrEmpty.empty;
+    return value != null ? IntegerOrEmpty.fromString(value) : IntegerOrEmpty.empty;
   }
 
   /**
@@ -57,13 +57,6 @@ public class InputFile {
    */
   public String readLine() {
     return readLineAndDetectEnd();
-  }
-
-  private static IntegerOrEmpty convertToInt(String s) {
-    if (s == null || s.isEmpty()) {
-      return IntegerOrEmpty.empty;
-    }
-    return IntegerOrEmpty.fromValue(Long.valueOf(s));
   }
 
   /**
