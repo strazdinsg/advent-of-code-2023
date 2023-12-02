@@ -56,4 +56,9 @@ public class IntegerOrEmpty {
   public Long getValue() {
     return value;
   }
+
+  @Override
+  public String toString() {
+    return isNumber() ? "" + value : "NaN";
+  }
 }
