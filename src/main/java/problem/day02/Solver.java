@@ -35,15 +35,18 @@ public class Solver {
     }
 
     long sum = 0;
+    long powerSum = 0;
     List<String> lines = inputFile.readLinesUntilEmptyLine();
     for (String line : lines) {
       Game game = parseGame(line);
       if (game.isPossibleWith(RED_BALL_COUNT, GREEN_BALL_COUNT, BLUE_BALL_COUNT)) {
         sum += game.getId();
       }
+      powerSum += game.getMinCubePower();
     }
 
     Logger.info("The sum of possible games IDs " + sum);
+    Logger.info("The sum of minimum cube powers: " + powerSum);
   }
 
   private Game parseGame(String line) {

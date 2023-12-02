@@ -1,6 +1,5 @@
 package problem.day02;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,6 +8,9 @@ import java.util.List;
  */
 public class Game {
   private final long id;
+  private long minRed = 0;
+  private long minGreen = 0;
+  private long minBlue = 0;
   private final List<BallCounts> tries = new LinkedList<>();
 
   /**
@@ -29,17 +31,7 @@ public class Game {
    * @return True if it would be possible to run this game, false otherwise.
    */
   public boolean isPossibleWith(int redBalls, int greenBalls, int blueBalls) {
-    boolean possible = true;
-    Iterator<BallCounts> it = tries.iterator();
-
-    while (possible && it.hasNext()) {
-      BallCounts oneTry = it.next();
-      possible = oneTry.red() <= redBalls
-          && oneTry.green() <= greenBalls
-          && oneTry.blue() <= blueBalls;
-    }
-
-    return possible;
+    return redBalls >= minRed && greenBalls >= minGreen && blueBalls >= minBlue;
   }
 
   /**
@@ -58,6 +50,15 @@ public class Game {
    */
   public void addTry(BallCounts ballCounts) {
     tries.add(ballCounts);
+    if (ballCounts.red() > minRed) {
+      minRed = ballCounts.red();
+    }
+    if (ballCounts.green() > minGreen) {
+      minGreen = ballCounts.green();
+    }
+    if (ballCounts.blue() > minBlue) {
+      minBlue = ballCounts.blue();
+    }
   }
 
   @Override
@@ -72,5 +73,18 @@ public class Game {
       sb.append("; ");
     }
     return sb.toString();
+  }
+
+  /**
+   * Get the minimum power of this game - minimum number of red, green and blue cubes multipled.
+   *
+   * @return The minimum power of the game.
+   */
+  public long getMinCubePower() {
+    long power = minRed * minGreen * minBlue;
+    if (power == 0) {
+      throw new IllegalStateException("Power can't be zero: " + this);
+    }
+    return power;
   }
 }
