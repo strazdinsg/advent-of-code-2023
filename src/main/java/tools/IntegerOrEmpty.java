@@ -33,7 +33,6 @@ public class IntegerOrEmpty {
     try {
       i = new IntegerOrEmpty(Long.parseLong(value));
     } catch (NumberFormatException e) {
-      Logger.error("Invalid number format: " + value);
       i = IntegerOrEmpty.empty;
     }
     return i;

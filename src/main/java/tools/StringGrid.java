@@ -18,7 +18,7 @@ public class StringGrid {
    *                                  column count of the previously added rows
    */
   public void appendRow(String row) throws IllegalArgumentException {
-    if (row == null || row.length() == 0) {
+    if (row == null || row.isEmpty()) {
       throw new IllegalArgumentException("Can't add empty rows to grid");
     } else if (!rows.isEmpty() && row.length() != columnCount) {
       throw new IllegalArgumentException("Column count must be the same for all rows in the grid!");
