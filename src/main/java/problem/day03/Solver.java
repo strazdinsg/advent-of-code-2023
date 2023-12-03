@@ -15,6 +15,7 @@ import tools.StringGrid;
  * See description here: https://adventofcode.com/2023/day/3
  */
 public class Solver {
+  private static final char GEAR_SYMBOL = '*';
   private final List<PartNumber> partNumbers = new LinkedList<>();
   private StringGrid grid;
 
@@ -42,8 +43,10 @@ public class Solver {
     for (PartNumber partNumber : partNumbers) {
       partNumberSum += partNumber.number();
     }
+    long gearRatioSum = findGearRatioSum();
 
     Logger.info("The sum of part numbers is " + partNumberSum);
+    Logger.info("The sum of gear ratios is " + gearRatioSum);
   }
 
   private void findPartNumbers() {
@@ -128,4 +131,43 @@ public class Solver {
   private boolean isSchematicCharacter(char c) {
     return !isDigit(c) && c != '.';
   }
+
+  private long findGearRatioSum() {
+    long sum = 0;
+    for (int rowIndex = 0; rowIndex < grid.getRowCount(); ++rowIndex) {
+      for (int columnIndex = 0; columnIndex < grid.getColumnCount(); ++columnIndex) {
+        if (grid.getCharacter(rowIndex, columnIndex) == GEAR_SYMBOL) {
+          sum += getGearRatio(rowIndex, columnIndex);
+        }
+      }
+    }
+    return sum;
+  }
+
+  private long getGearRatio(int rowIndex, int columnIndex) {
+    long gearRatio = 0;
+    List<PartNumber> numbers = getNumbersTouching(rowIndex, columnIndex);
+    if (numbers.size() == 2) {
+      gearRatio = numbers.get(0).number() * numbers.get(1).number();
+    }
+
+    return gearRatio;
+  }
+
+  private List<PartNumber> getNumbersTouching(int rowIndex, int columnIndex) {
+    List<PartNumber> numbers = new LinkedList<>();
+    for (PartNumber partNumber : partNumbers) {
+      if (isTouching(partNumber, rowIndex, columnIndex)) {
+        numbers.add(partNumber);
+      }
+    }
+    return numbers;
+  }
+
+  private boolean isTouching(PartNumber partNumber, int rowIndex, int columnIndex) {
+    Rectangle around = new Rectangle(partNumber.getStartColumn() - 1, partNumber.getRowIndex() - 1,
+        partNumber.getEndColumn() + 1, partNumber.getRowIndex() + 1);
+    return around.isWithin(columnIndex, rowIndex);
+  }
+
 }

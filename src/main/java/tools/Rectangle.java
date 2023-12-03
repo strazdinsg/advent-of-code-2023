@@ -161,4 +161,15 @@ public class Rectangle {
     Vector newBottomRight = bottomRight.minus(v);
     return new Rectangle(newTopLeft, newBottomRight);
   }
+
+  /**
+   * Check whether a point with coordinates (x, y) is located inside this rectangle.
+   *
+   * @param x The x coordinate of the position to test
+   * @param y The y coordinate of the position to test
+   * @return True when the point is inside the rectangle, false otherwise
+   */
+  public boolean isWithin(int x, int y) {
+    return x >= getMinX() && x <= getMaxX() && y >= getMinY() && y <= getMaxY();
+  }
 }
