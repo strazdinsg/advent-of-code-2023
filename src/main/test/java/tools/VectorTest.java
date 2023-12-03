@@ -6,9 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-public class VectorTest {
+class VectorTest {
   @Test
-  public void testZero() {
+  void testZero() {
     assertTrue(new Vector(0, 0).isZero());
     assertFalse(new Vector(1, 0).isZero());
     assertFalse(new Vector(0, 1).isZero());
@@ -16,7 +16,7 @@ public class VectorTest {
   }
 
   @Test
-  public void testScaling() {
+  void testScaling() {
     Vector zero = new Vector(0, 0);
     Vector scaled = zero.scaleToOneUnit();
     assertEquals(scaled, zero);
@@ -31,14 +31,14 @@ public class VectorTest {
   }
 
   @Test
-  public void testAdding() {
+  void testAdding() {
     assertEquals(new Vector(5, 3), new Vector(2, 1).plus(new Vector(3, 2)));
     assertEquals(new Vector(5, 3), new Vector(5, 3).plus(new Vector(0, 0)));
     assertEquals(new Vector(-5, -3), new Vector(2, 4).plus(new Vector(-7, -7)));
   }
 
   @Test
-  public void testAbsoluteValues() {
+  void testAbsoluteValues() {
     assertEquals(3, new Vector(-3, -2).getAbsoluteX());
     assertEquals(2, new Vector(-3, -2).getAbsoluteY());
     assertEquals(3, new Vector(3, -2).getAbsoluteX());

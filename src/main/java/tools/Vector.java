@@ -63,26 +63,6 @@ public record Vector(int x, int y) {
   }
 
   /**
-   * Get the x coordinate of the vector.
-   *
-   * @return The x coordinate.
-   */
-  @Override
-  public int x() {
-    return x;
-  }
-
-  /**
-   * Get the y coordinate of the vector.
-   *
-   * @return The y coordinate.
-   */
-  @Override
-  public int y() {
-    return y;
-  }
-
-  /**
    * Get the absolute value of the x-axis.
    *
    * @return The absolute value of the x-axis
