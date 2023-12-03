@@ -9,7 +9,8 @@ import tools.Logger;
  * Solution for the problem of Day 02
  * See description here: https://adventofcode.com/2023/day/2
  * The main ideas: interpret the strings as games. Part 1: check which ones have higher
- * number of balls than available in the spec.
+ * number of balls than available in the spec. Part 2: when adding a try to the game, keep the
+ * running max value for each color.
  */
 public class Solver {
   private static final int RED_BALL_COUNT = 12;
