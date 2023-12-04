@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -121,7 +121,7 @@ public class InputFile {
    * @return The lines as a list, not including the empty line
    */
   public List<String> readLinesUntilEmptyLine() {
-    List<String> lines = new LinkedList<>();
+    List<String> lines = new ArrayList<>();
     String line = readLine();
     while (!isEndOfFile() && line != null && !"".equals(line)) {
       lines.add(line);

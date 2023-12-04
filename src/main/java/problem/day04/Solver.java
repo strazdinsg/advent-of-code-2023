@@ -1,10 +1,11 @@
 package problem.day04;
 
-import tools.InputFile;
-import tools.Logger;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import tools.InputFile;
+import tools.Logger;
 
 /**
  * Solution for the problem of Day 04
@@ -13,6 +14,8 @@ import java.util.Set;
 public class Solver {
   int numberStartPosition;
   int numberSeparatorPosition;
+  List<Integer> winningNumberCounts = new ArrayList<>();
+  List<Long> points = new ArrayList<>();
 
   /**
    * Run the solver - solve the puzzle.
@@ -33,14 +36,12 @@ public class Solver {
     }
 
     List<String> lines = inputFile.readLinesUntilEmptyLine();
-    initializeSeparators(lines.get(0));
 
-    long points = 0;
-    for (String line : lines) {
-      points += calculatePoints(line);
-    }
-    Logger.info("Total points: " + points);
+    initializeSeparators(lines.get(0));
+    calculatePoints(lines);
+    calculateFinalCardCount(lines);
   }
+
 
   private void initializeSeparators(String line) {
     numberStartPosition = line.indexOf(": ") + 2;
@@ -53,22 +54,57 @@ public class Solver {
     }
   }
 
-  private long calculatePoints(String line) {
-    long points = 0;
+  private void calculatePoints(List<String> lines) {
+    long totalPoints = 0;
+    for (String line : lines) {
+      totalPoints += calculatePointsForCard(line);
+    }
+    Logger.info("Total points: " + totalPoints);
+  }
+
+  private void calculateFinalCardCount(List<String> lines) {
+    long[] finalCardCounts = new long[lines.size()];
+    long cardCount = 0;
+
+    // Look at the cards backwards, because card n is dependent on cards n+1, n+2, ..., n+w,
+    // where w is the number of winning numbers in card n
+    for (int i = finalCardCounts.length - 1; i >= 0; --i) {
+      finalCardCounts[i] = 1;
+      int w = winningNumberCounts.get(i);
+      for (int j = i + 1; j <= i + w && j < finalCardCounts.length; ++j) {
+        finalCardCounts[i] += finalCardCounts[j];
+      }
+      cardCount += finalCardCounts[i];
+    }
+
+    Logger.info("Total number of cards in the end: " + cardCount);
+  }
+
+  private long calculatePointsForCard(String line) {
+    long pointsForThisCard = 0;
+    int winningNumberCount = 0;
     Set<Integer> winning = getWinningNumbers(line);
     Set<Integer> numbersGot = getNumbersGot(line);
 
     for (Integer n : numbersGot) {
       if (winning.contains(n)) {
-        if (points == 0) {
-          points = 1;
+        winningNumberCount++;
+        if (pointsForThisCard == 0) {
+          pointsForThisCard = 1;
         } else {
-          points *= 2;
+          pointsForThisCard <<= 1;
         }
       }
     }
 
-    return points;
+    if (winningNumberCount == 0) {
+      pointsForThisCard = 0;
+    }
+
+    winningNumberCounts.add(winningNumberCount);
+    points.add(pointsForThisCard);
+
+    return pointsForThisCard;
   }
 
   private Set<Integer> getWinningNumbers(String line) {
@@ -81,7 +117,6 @@ public class Solver {
 
   private Set<Integer> parseNumbers(String s) {
     Set<Integer> numbers = new HashSet<>();
-    Logger.info("Parsing " + s);
     while (!s.isEmpty()) {
       s = pickNumberFrom(s, numbers);
     }
@@ -94,7 +129,7 @@ public class Solver {
       throw new IllegalStateException("Invalid number string: " + s);
     }
     String numberString = s.substring(0, 2);
-    if (numberString.substring(0, 1).equals(" ")) {
+    if (numberString.charAt(0) == ' ') {
       numberString = numberString.substring(1);
     }
     numbers.add(Integer.parseInt(numberString));
