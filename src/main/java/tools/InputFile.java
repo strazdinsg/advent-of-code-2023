@@ -51,6 +51,35 @@ public class InputFile {
   }
 
   /**
+   * Read a line from the file, expect that there will be a prefix and the rest of the line
+   * will contain a space-separated integers.
+   *
+   * @param expectedPrefix The expected prefix of the line
+   * @return The list of integers on the line
+   */
+  public List<Long> readSpacedIntegerLine(String expectedPrefix) {
+    String line = readLine();
+    if (line == null) {
+      throw new IllegalStateException("End of line reached");
+    }
+    if (expectedPrefix != null && !expectedPrefix.isEmpty()) {
+      if (!line.startsWith(expectedPrefix)) {
+        throw new IllegalStateException("Line does not start with the expected prefix: " + line);
+      }
+      line = line.substring(expectedPrefix.length());
+    }
+    line = line.trim();
+    List<Long> numbers = new ArrayList<>();
+    if (!line.isEmpty()) {
+      String[] numberStrings = line.split(" ");
+      for (String s : numberStrings) {
+        numbers.add(Long.parseLong(s));
+      }
+    }
+    return numbers;
+  }
+
+  /**
    * Read one line from the input file.
    *
    * @return The line as a string, null when end is reached.
