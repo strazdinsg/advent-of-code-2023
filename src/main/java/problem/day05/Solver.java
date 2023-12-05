@@ -1,8 +1,10 @@
 package problem.day05;
 
-import tools.InputFile;
-import tools.Logger;
+import java.util.LinkedList;
 import java.util.List;
+import tools.InputFile;
+import tools.IntegerRange;
+import tools.Logger;
 
 /**
  * Solution for the problem of Day 04
@@ -31,9 +33,13 @@ public class Solver {
       return;
     }
 
+    List<Long> seeds = processPartOne(inputFile);
+    processPartTwo(seeds);
+  }
+
+  private List<Long> processPartOne(InputFile inputFile) {
     List<Long> seeds = inputFile.readSpacedIntegerLine("seeds: ");
     inputFile.skipEmptyLine();
-
     IntegerRangeMap map = null;
     for (int i = 0; i < MAP_COUNT; ++i) {
       IntegerRangeMap nextMap = readIntegerRangeMap(inputFile);
@@ -52,8 +58,26 @@ public class Solver {
         minLocation = seedLocation;
       }
     }
+    Logger.info("Closest location (Part 1): " + minLocation);
+    return seeds;
+  }
 
-    Logger.info("Closest location: " + minLocation);
+
+  private void processPartTwo(List<Long> seeds) {
+    long minLocationSeedRanges = Long.MAX_VALUE;
+    int rangeNumber = 1;
+    List<IntegerRange> seedRanges = createSeedRanges(seeds);
+    for (IntegerRange range : seedRanges) {
+      Logger.info("Processing range " + rangeNumber++);
+      for (long seed = range.getStart(); seed <= range.getEnd(); ++seed) {
+        long seedLocation = headMap.findFinalMappingFor(seed);
+        if (seedLocation < minLocationSeedRanges) {
+          minLocationSeedRanges = seedLocation;
+        }
+      }
+    }
+
+    Logger.info("Closest location for seed ranges (Part 2): " + minLocationSeedRanges);
   }
 
   private IntegerRangeMap readIntegerRangeMap(InputFile inputFile) {
@@ -66,7 +90,7 @@ public class Solver {
       numbers = inputFile.readSpacedIntegerLine("");
       if (numbers.size() == 3) {
         map.addRange(numbers.get(1), numbers.get(0), numbers.get(2));
-      } else if (!numbers.isEmpty()){
+      } else if (!numbers.isEmpty()) {
         throw new IllegalStateException("Unexpected line format: " + numbers);
       }
     } while (!numbers.isEmpty());
@@ -74,4 +98,13 @@ public class Solver {
     return map;
   }
 
+  private List<IntegerRange> createSeedRanges(List<Long> seeds) {
+    List<IntegerRange> ranges = new LinkedList<>();
+    for (int i = 0; i < seeds.size(); i += 2) {
+      long start = seeds.get(i);
+      long length = seeds.get(i + 1);
+      ranges.add(new IntegerRange(start, start + length - 1));
+    }
+    return ranges;
+  }
 }
