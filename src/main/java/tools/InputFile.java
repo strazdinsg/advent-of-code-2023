@@ -68,7 +68,11 @@ public class InputFile {
       }
       line = line.substring(expectedPrefix.length());
     }
+    while (line.contains("  ")) {
+      line = line.replaceAll("  ", " ");
+    }
     line = line.trim();
+
     List<Long> numbers = new ArrayList<>();
     if (!line.isEmpty()) {
       String[] numberStrings = line.split(" ");
