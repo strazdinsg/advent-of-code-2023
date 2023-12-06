@@ -1,8 +1,8 @@
 package problem.day06;
 
+import java.util.List;
 import tools.InputFile;
 import tools.Logger;
-import java.util.List;
 
 /**
  * Solution for the problem of Day 06
@@ -28,6 +28,16 @@ public class Solver {
       return;
     }
 
+    boolean solvePartOne = false;
+
+    if (solvePartOne) {
+      calculatePartOneWins(inputFile);
+    } else {
+      calculatePartTwoWins(inputFile);
+    }
+  }
+
+  private void calculatePartOneWins(InputFile inputFile) {
     List<Long> times = inputFile.readSpacedIntegerLine("Time:");
     List<Long> distances = inputFile.readSpacedIntegerLine("Distance:");
     if (times.size() != distances.size()) {
@@ -50,12 +60,18 @@ public class Solver {
     Logger.info("Answer for part 1: " + winningWayMultiplication);
   }
 
+  private void calculatePartTwoWins(InputFile inputFile) {
+    long realTime = inputFile.readLineAsSpacedNumber("Time:");
+    long realDistance = inputFile.readLineAsSpacedNumber("Distance:");
+    long answerPartTwo = calculateWinningWays(realTime, realDistance);
+    Logger.info("Answer for part 2: " + answerPartTwo);
+  }
+
   private long calculateWinningWays(long maxTime, long recordDistance) {
     long winningWays = 0;
 
     for (long hold = 1; hold < maxTime; ++hold) {
       long distance = calculateDistance(hold, maxTime);
-      Logger.info("Hold " + hold + " drive " + distance);
       if (distance > recordDistance) {
         winningWays++;
       }

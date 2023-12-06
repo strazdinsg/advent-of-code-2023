@@ -58,6 +58,19 @@ public class InputFile {
    * @return The list of integers on the line
    */
   public List<Long> readSpacedIntegerLine(String expectedPrefix) {
+    String line = readLineWithPrefix(expectedPrefix);
+
+    List<Long> numbers = new ArrayList<>();
+    if (!line.isEmpty()) {
+      String[] numberStrings = line.split(" ");
+      for (String s : numberStrings) {
+        numbers.add(Long.parseLong(s));
+      }
+    }
+    return numbers;
+  }
+
+  private String readLineWithPrefix(String expectedPrefix) {
     String line = readLine();
     if (line == null) {
       throw new IllegalStateException("End of line reached");
@@ -69,18 +82,10 @@ public class InputFile {
       line = line.substring(expectedPrefix.length());
     }
     while (line.contains("  ")) {
-      line = line.replaceAll("  ", " ");
+      line = line.replace("  ", " ");
     }
     line = line.trim();
-
-    List<Long> numbers = new ArrayList<>();
-    if (!line.isEmpty()) {
-      String[] numberStrings = line.split(" ");
-      for (String s : numberStrings) {
-        numbers.add(Long.parseLong(s));
-      }
-    }
-    return numbers;
+    return line;
   }
 
   /**
@@ -179,5 +184,21 @@ public class InputFile {
       // Will return null
     }
     return result;
+  }
+
+  /**
+   * Read the whole line, treat it as a prefix and as a single integer number which has some
+   * space between some of the digits. (Bad kerning)
+   *
+   * @param expectedPrefix The expected prefix of the line
+   * @return The content of the line (except the prefix and spaces) treated as a single
+   *     integer number
+   */
+  public long readLineAsSpacedNumber(String expectedPrefix) {
+    String line = readLineWithPrefix(expectedPrefix);
+    while (line.contains(" ")) {
+      line = line.replace(" ", "");
+    }
+    return Long.parseLong(line);
   }
 }
