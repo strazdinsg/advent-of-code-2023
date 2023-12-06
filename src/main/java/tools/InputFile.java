@@ -148,7 +148,7 @@ public class InputFile {
    */
   public void skipEmptyLine() throws IllegalStateException {
     String emptyLine = readLine();
-    if (emptyLine != null && !"".equals(emptyLine)) {
+    if (emptyLine != null && !emptyLine.isEmpty()) {
       throw new IllegalStateException("Expected empty line but got " + emptyLine);
     }
   }
@@ -161,7 +161,7 @@ public class InputFile {
   public List<String> readLinesUntilEmptyLine() {
     List<String> lines = new ArrayList<>();
     String line = readLine();
-    while (!isEndOfFile() && line != null && !"".equals(line)) {
+    while (!isEndOfFile() && line != null && !line.isEmpty()) {
       lines.add(line);
       line = readLine();
     }

@@ -7,8 +7,8 @@ import tools.IntegerRange;
 import tools.Logger;
 
 /**
- * Solution for the problem of Day 04
- * See description here: https://adventofcode.com/2023/day/4
+ * Solution for the problem of Day 05
+ * See description here: https://adventofcode.com/2023/day/5
  */
 public class Solver {
   private IntegerRangeMap headMap = null;
@@ -43,7 +43,7 @@ public class Solver {
     IntegerRangeMap map = null;
     for (int i = 0; i < MAP_COUNT; ++i) {
       IntegerRangeMap nextMap = readIntegerRangeMap(inputFile);
-      if (headMap == null) {
+      if (map == null) {
         headMap = nextMap;
       } else {
         map.setLinkedMap(nextMap);
