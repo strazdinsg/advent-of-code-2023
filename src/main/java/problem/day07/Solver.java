@@ -1,15 +1,16 @@
 package problem.day07;
 
-import tools.InputFile;
-import tools.Logger;
 import java.util.Arrays;
 import java.util.List;
+import tools.InputFile;
+import tools.Logger;
 
 /**
  * Solution for the problem of Day 07
  * See description here: https://adventofcode.com/2023/day/7
  */
 public class Solver {
+  private static final boolean USE_JOKERS = true;
 
   /**
    * Run the solver - solve the puzzle.
@@ -55,7 +56,7 @@ public class Solver {
     String cards = parts[0];
     long bid = Long.parseLong(parts[1]);
 
-    return new Game(cards, bid);
+    return new Game(cards, bid, USE_JOKERS);
   }
 }
 
