@@ -146,8 +146,8 @@ public class Game implements Comparable<Game> {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("[");
-    for (int i = 0; i < cardStrengths.length; ++i) {
-      sb.append(cardStrengths[i]);
+    for (int cardStrength : cardStrengths) {
+      sb.append(cardStrength);
       sb.append(" ");
     }
     sb.append("]  ");
