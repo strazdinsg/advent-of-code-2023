@@ -5,6 +5,11 @@ package tools;
  */
 public class Algos {
   /**
+   * Not allowed to instantiate this class.
+   */
+  private Algos() {}
+
+  /**
    * Find the least common multiplier of a and b.
    * Code adapted from https://www.baeldung.com/java-least-common-multiple
    *

@@ -1,7 +1,9 @@
 package problem.day07;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A class representing one Camel Card game.
@@ -192,5 +194,20 @@ public class Game implements Comparable<Game> {
       i++;
     }
     return comparison;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (!(obj instanceof Game g)) {
+      throw new IllegalArgumentException("Can't compare game to a " + obj);
+    }
+    return compareTo(g) == 0;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = Objects.hash(bid, handType, useJokers, jokerCount, cardCounts);
+    result = 31 * result + Arrays.hashCode(cardStrengths);
+    return result;
   }
 }
