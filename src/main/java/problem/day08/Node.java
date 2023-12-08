@@ -1,14 +1,14 @@
 package problem.day08;
 
 public record Node(String name, String leftNodeName, String rightNodeName) {
-  private static final String FINISH_NODE_NAME = "ZZZ";
-  private static final String START_NODE_NAME = "AAA";
+  private static final String FINISH_POSTFIX = "Z";
+  private static final String START_POSTFIX = "A";
 
   public boolean isFinish() {
-    return name.equals(FINISH_NODE_NAME);
+    return name.endsWith(FINISH_POSTFIX);
   }
 
   public boolean isStart() {
-    return name.equals(START_NODE_NAME);
+    return name.endsWith(START_POSTFIX);
   }
 }

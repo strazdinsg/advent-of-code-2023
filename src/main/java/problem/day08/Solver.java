@@ -1,5 +1,6 @@
 package problem.day08;
 
+import tools.Algos;
 import tools.InputFile;
 import tools.Logger;
 import java.util.List;
@@ -31,26 +32,31 @@ public class Solver {
     Directions directions = new Directions(inputFile.readLine());
     inputFile.skipEmptyLine();
 
+    Network network = parseNetwork(inputFile);
+    List<Node> startNodes = network.getStartNodes();
+    if (startNodes.isEmpty()) {
+      throw new IllegalStateException("Start nodes not found");
+    }
+    Logger.info(startNodes.size() + " start nodes");
+
+    long commonLoopLength = 1;
+    for (Node startNode : startNodes) {
+      long loopLength = network.findLoopLength(startNode, directions);
+      directions.reset();
+      commonLoopLength = Algos.leastCommonMultiplier(commonLoopLength, loopLength);
+      Logger.info("Path length after node " + startNode.name() + ": " + commonLoopLength);
+    }
+
+    Logger.info("Reached destination in " + commonLoopLength + " steps");
+  }
+
+  private Network parseNetwork(InputFile inputFile) {
     Network network = new Network();
     List<String> lines = inputFile.readLinesUntilEmptyLine();
     for (String line : lines) {
       network.addNode(parseNode(line));
     }
-
-    Node currentNode = network.getStartNode();
-    if (currentNode == null) {
-      throw new IllegalStateException("Start node not found");
-    }
-
-    int steps = 0;
-    while (!currentNode.isFinish()) {
-      Direction direction = directions.getNext();
-      currentNode = network.move(currentNode, direction);
-      steps++;
-      Logger.info(direction + " " + steps + " " + currentNode.name());
-    }
-
-    Logger.info("Reached destination in " + steps + " steps");
+    return network;
   }
 
   private Node parseNode(String line) {
@@ -64,7 +70,6 @@ public class Solver {
 
     return new Node(nodeName, leftNodeName, rightNodeName);
   }
-
 }
 
 
