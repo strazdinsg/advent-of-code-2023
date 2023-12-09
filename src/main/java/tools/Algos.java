@@ -1,5 +1,7 @@
 package tools;
 
+import java.util.List;
+
 /**
  * Some commonly used algorithms.
  */
@@ -7,7 +9,8 @@ public class Algos {
   /**
    * Not allowed to instantiate this class.
    */
-  private Algos() {}
+  private Algos() {
+  }
 
   /**
    * Find the least common multiplier of a and b.
@@ -30,5 +33,20 @@ public class Algos {
       lcm += highest;
     }
     return lcm;
+  }
+
+  /**
+   * convert a List to array with the same values.
+   *
+   * @param values The value list
+   * @return An array with the same values
+   */
+  public static long[] listToArray(List<Long> values) {
+    int n = values.size();
+    long[] v = new long[n];
+    for (int i = 0; i < n; ++i) {
+      v[i] = values.get(i);
+    }
+    return v;
   }
 }

@@ -1,8 +1,11 @@
 package problem.day09;
 
+import static tools.Algos.listToArray;
+
+import java.util.List;
+import java.util.Stack;
 import tools.InputFile;
 import tools.Logger;
-import java.util.List;
 
 /**
  * Solution for the problem of Day 09
@@ -11,6 +14,8 @@ import java.util.List;
  * elements of all the prediction rows.
  */
 public class Solver {
+  Stack<Long> firstNumbers = new Stack<>(); // History of first numbers
+  long firstNumberSum = 0;
 
   /**
    * Run the solver - solve the puzzle.
@@ -38,12 +43,14 @@ public class Solver {
     }
 
     Logger.info("Sum of predictions: " + sum);
+    Logger.info("Sum of first number predictions: " + firstNumberSum);
   }
 
   private long predictNextValue(List<Long> valueList) {
     long[] values = listToArray(valueList);
     int valueCount = values.length;
     long sumOfLastValues = values[valueCount - 1];
+    firstNumbers.clear();
 
     boolean allZeroes = false;
     while (!allZeroes) {
@@ -52,10 +59,13 @@ public class Solver {
       sumOfLastValues += values[valueCount - 1];
     }
 
+    calculateFirstNumberPrediction();
+
     return sumOfLastValues;
   }
 
   private boolean replaceValuesWithDifferences(long[] values, int valueCount) {
+    rememberFirstNumber(values[0]);
     boolean onlyZeroes = true;
     for (int i = 1; i < valueCount; ++i) {
       values[i - 1] = values[i] - values[i - 1];
@@ -64,14 +74,18 @@ public class Solver {
     return onlyZeroes;
   }
 
-  private long[] listToArray(List<Long> values) {
-    int n = values.size();
-    long[] v = new long[n];
-    for (int i = 0; i < n; ++i) {
-      v[i] = values.get(i);
-    }
-    return v;
+  private void rememberFirstNumber(long firstNumber) {
+    firstNumbers.add(firstNumber);
   }
+
+  private void calculateFirstNumberPrediction() {
+    long firstPrediction = 0;
+    while (!firstNumbers.isEmpty()) {
+      firstPrediction = firstNumbers.pop() - firstPrediction;
+    }
+    firstNumberSum += firstPrediction;
+  }
+
 }
 
 
