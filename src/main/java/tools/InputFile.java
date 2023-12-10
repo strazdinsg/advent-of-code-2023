@@ -125,17 +125,17 @@ public class InputFile {
   }
 
   /**
-   * Read all lines from the input file, store them in a StringGrid structure.
+   * Read all lines from the input file (until an empty line is encountered),
+   * store them in a StringGrid structure.
    *
    * @return The file content as a StringGrid.
    */
   public StringGrid readAllIntoGridBuffer() {
     StringGrid buffer = new StringGrid();
-    while (!isEndOfFile()) {
-      String line = readLineAndDetectEnd();
-      if (line != null) {
-        buffer.appendRow(line);
-      }
+    String line = readLineAndDetectEnd();
+    while (!isEndOfFile() && line != null && !line.isEmpty()) {
+      buffer.appendRow(line);
+      line = readLineAndDetectEnd();
     }
     return buffer;
   }

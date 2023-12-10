@@ -117,4 +117,8 @@ public class StringGrid {
     String row = getRow(rowIndex);
     return row.charAt(columnIndex);
   }
+
+  public char getCharacter(Vector position) {
+    return getCharacter(position.y(), position.x());
+  }
 }
