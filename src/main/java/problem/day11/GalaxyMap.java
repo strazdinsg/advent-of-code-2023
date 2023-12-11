@@ -130,20 +130,18 @@ public class GalaxyMap {
   }
 
   private long getRowDistance(Vector galaxy1, Vector galaxy2) {
-    Vector dv = galaxy2.minus(galaxy1);
-    int dy = dv.y() >= 0 ? 1 : -1;
+    int step = galaxy2.minus(galaxy1).y() >= 0 ? 1 : -1;
     long rowDistance = 0;
-    for (int row = galaxy1.y() + dy; row != galaxy2.y() + dy; row += dy) {
+    for (int row = galaxy1.y() + step; row != galaxy2.y() + step; row += step) {
       rowDistance += rowDistances[row];
     }
     return rowDistance;
   }
 
   private long getColumnDistance(Vector galaxy1, Vector galaxy2) {
-    Vector dv = galaxy2.minus(galaxy1);
-    int dx = dv.x() >= 0 ? 1 : -1;
+    int step = galaxy2.minus(galaxy1).x() >= 0 ? 1 : -1;
     long columnDistance = 0;
-    for (int column = galaxy1.x() + dx; column != galaxy2.x() + dx; column += dx) {
+    for (int column = galaxy1.x() + step; column != galaxy2.x() + step; column += step) {
       columnDistance += columnDistances[column];
     }
     return columnDistance;
