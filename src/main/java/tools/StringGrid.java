@@ -122,6 +122,12 @@ public class StringGrid {
     return getCharacter(position.y(), position.x());
   }
 
+  /**
+   * Find locations of all instances of a particular character.
+   *
+   * @param c The character to find.
+   * @return All the locations of the character instances
+   */
   public List<Vector> findCharacterLocations(char c) {
     List<Vector> positions = new ArrayList<>();
     for (int row = 0; row < getRowCount(); row++) {

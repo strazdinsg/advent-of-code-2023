@@ -25,7 +25,7 @@ public class OutputFile {
   }
 
   /**
-   * Write a string grid to the file
+   * Write a string grid to the file.
    *
    * @param grid A string grid to write
    */

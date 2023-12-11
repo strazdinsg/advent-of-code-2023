@@ -1,55 +1,64 @@
 package problem.day11;
 
-import tools.StringGrid;
-import tools.Vector;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import tools.StringGrid;
+import tools.Vector;
 
+/**
+ * A map of galaxies.
+ */
 public class GalaxyMap {
   private static final char EMPTY = '.';
   private static final char GALAXY = '#';
+  private static final long SHORT_DISTANCE = 1;
+  private static final long LONG_DISTANCE = 1000000;
   private StringGrid grid;
   private List<Vector> galaxies = new ArrayList<>();
+  private long[] rowDistances;
+  private long[] columnDistances;
 
+  /**
+   * Create a galaxy map.
+   *
+   * @param grid The grid representing the map
+   */
   public GalaxyMap(StringGrid grid) {
     this.grid = grid;
   }
 
-  public void expand() {
-    Set<Integer> emptyRows = findEmptyRows();
-    Set<Integer> emptyColumns = findEmptyColumns();
-    grid = expandGrid(emptyRows, emptyColumns);
+  /**
+   * Find the empty columns and rows where the distances are expanded.
+   */
+  public void findExpandedDistances() {
+    findRowDistances();
+    findColumnDistances();
   }
 
-  private StringGrid expandGrid(Set<Integer> emptyRows, Set<Integer> emptyColumns) {
-    StringGrid newGrid = new StringGrid();
-    String emptyRow = createEmptyRow(grid.getColumnCount() + emptyColumns.size());
+  private void findRowDistances() {
+    rowDistances = new long[grid.getRowCount()];
+    Set<Integer> emptyRows = findEmptyRows();
     for (int row = 0; row < grid.getRowCount(); ++row) {
       if (emptyRows.contains(row)) {
-        newGrid.appendRow(emptyRow);
-        newGrid.appendRow(emptyRow);
+        rowDistances[row] = LONG_DISTANCE;
       } else {
-        newGrid.appendRow(createExpandedRow(grid.getRow(row), emptyColumns));
+        rowDistances[row] = SHORT_DISTANCE;
       }
     }
-    return newGrid;
   }
 
-  private String createExpandedRow(String row, Set<Integer> emptyColumns) {
-    StringBuilder sb = new StringBuilder();
-    for (int column = 0; column < row.length(); ++column) {
-      sb.append(row.charAt(column));
+  private void findColumnDistances() {
+    columnDistances = new long[grid.getColumnCount()];
+    Set<Integer> emptyColumns = findEmptyColumns();
+    for (int column = 0; column < grid.getColumnCount(); ++column) {
       if (emptyColumns.contains(column)) {
-        sb.append(EMPTY);
+        columnDistances[column] = LONG_DISTANCE;
+      } else {
+        columnDistances[column] = SHORT_DISTANCE;
       }
     }
-    return sb.toString();
-  }
-
-  private String createEmptyRow(int columnCount) {
-    return ".".repeat(columnCount);
   }
 
   private Set<Integer> findEmptyRows() {
@@ -92,11 +101,19 @@ public class GalaxyMap {
     return empty;
   }
 
+  /**
+   * Find the locations of galaxies.
+   */
   public void findGalaxies() {
     galaxies = grid.findCharacterLocations(GALAXY);
   }
 
-  public long getDistanceSum() {
+  /**
+   * Calculate distances between the galaxies.
+   *
+   * @return The sum of distances between the galaxies
+   */
+  public long calculateDistances() {
     long distanceSum = 0;
     for (int i = 0; i < galaxies.size(); ++i) {
       for (int j = i + 1; j < galaxies.size(); ++j) {
@@ -107,11 +124,28 @@ public class GalaxyMap {
   }
 
   private long calculateDistanceBetween(Vector galaxy1, Vector galaxy2) {
-    Vector distance = galaxy2.minus(galaxy1);
-    return distance.getAbsoluteX() + distance.getAbsoluteY();
+    long rowDistance = getRowDistance(galaxy1, galaxy2);
+    long columnDistance = getColumnDistance(galaxy1, galaxy2);
+    return rowDistance + columnDistance;
   }
 
-  public StringGrid getGrid() {
-    return grid;
+  private long getRowDistance(Vector galaxy1, Vector galaxy2) {
+    Vector dv = galaxy2.minus(galaxy1);
+    int dy = dv.y() >= 0 ? 1 : -1;
+    long rowDistance = 0;
+    for (int row = galaxy1.y() + dy; row != galaxy2.y() + dy; row += dy) {
+      rowDistance += rowDistances[row];
+    }
+    return rowDistance;
+  }
+
+  private long getColumnDistance(Vector galaxy1, Vector galaxy2) {
+    Vector dv = galaxy2.minus(galaxy1);
+    int dx = dv.x() >= 0 ? 1 : -1;
+    long columnDistance = 0;
+    for (int column = galaxy1.x() + dx; column != galaxy2.x() + dx; column += dx) {
+      columnDistance += columnDistances[column];
+    }
+    return columnDistance;
   }
 }

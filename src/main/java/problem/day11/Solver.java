@@ -3,11 +3,14 @@ package problem.day11;
 
 import tools.InputFile;
 import tools.Logger;
-import tools.OutputFile;
 
 /**
  * Solution for the problem of Day 11
  * See description here: https://adventofcode.com/2023/day/11
+ * Idea: load the galaxy map, find empty columns and empty rows.
+ * Distance between each two galaxies goes horizontally and vertically. Each step
+ * is treated as a long distance if it goes over an empty column or row; as a
+ * short distance if it goes over a regular column or row.
  */
 public class Solver {
 
@@ -30,16 +33,9 @@ public class Solver {
     }
 
     GalaxyMap map = new GalaxyMap(inputFile.readAllIntoGridBuffer());
-    map.expand();
-    writeDebugOutput(map);
+    map.findExpandedDistances();
     map.findGalaxies();
-    Logger.info("Sum of distances: " + map.getDistanceSum());
-  }
-
-  private static void writeDebugOutput(GalaxyMap map) {
-    OutputFile outputFile = new OutputFile("galaxies.out");
-    outputFile.writeGrid(map.getGrid());
-    outputFile.close();
+    Logger.info("Sum of distances: " + map.calculateDistances());
   }
 }
 
