@@ -121,4 +121,16 @@ public class StringGrid {
   public char getCharacter(Vector position) {
     return getCharacter(position.y(), position.x());
   }
+
+  public List<Vector> findCharacterLocations(char c) {
+    List<Vector> positions = new ArrayList<>();
+    for (int row = 0; row < getRowCount(); row++) {
+      for (int column = 0; column < getColumnCount(); column++) {
+        if (getCharacter(row, column) == c) {
+          positions.add(new Vector(column, row));
+        }
+      }
+    }
+    return positions;
+  }
 }
