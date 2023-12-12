@@ -8,6 +8,7 @@ public class Arrangements {
   private static final char BROKEN = '#';
   private static final char UNKNOWN = '?';
   private static final char EMPTY = '.';
+  private static final int FOLD_COUNT = 5;
   private final String pattern;
   private final int[] patternSizes;
   private int[] rightmostPositions;
@@ -18,11 +19,22 @@ public class Arrangements {
       throw new IllegalArgumentException("Invalid line format: " + line);
     }
 
-    this.pattern = parts[0];
-    this.patternSizes = Arrays.stream(parts[1].split(","))
+    this.pattern = unfold(parts[0], "");
+    this.patternSizes = Arrays.stream(unfold(parts[1], ",").split(","))
         .mapToInt(Integer::parseInt)
         .toArray();
     calculateRightmostPositions();
+  }
+
+  private String unfold(String s, String separator) {
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < FOLD_COUNT; ++i) {
+      if (i > 0) {
+        sb.append(separator);
+      }
+      sb.append(s);
+    }
+    return sb.toString();
   }
 
   private void calculateRightmostPositions() {
@@ -46,14 +58,14 @@ public class Arrangements {
         int endPosition = position + patternSizes[patternIndex] - 1;
         if (patternIndex < patternSizes.length - 1) {
           int nextPatternStartPosition = position + patternSizes[patternIndex] + 1;
-          Logger.info(patternIndex + " at " + position);
+          //Logger.info(patternIndex + " at " + position);
           patternCount += countPatternsStartingAt(patternIndex + 1,
               nextPatternStartPosition, endPosition);
         } else {
           // This is the last pattern to check
           if (noBrokenPatternBetween(endPosition, pattern.length())) {
             patternCount++;
-            Logger.info(patternIndex + " at " + position + " == last");
+            //Logger.info(patternIndex + " at " + position + " == last");
           }
         }
       }

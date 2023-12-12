@@ -31,10 +31,11 @@ public class Solver {
 
     long arrangementCountSum = 0;
     List<String> lines = inputFile.readLinesUntilEmptyLine();
+    int rowsProcessed = 0;
     for (String line : lines) {
       Arrangements arrangements = new Arrangements(line);
-      Logger.info("");
       arrangementCountSum += arrangements.findCount();
+      Logger.info("Processed " + (++rowsProcessed) + " rows");
     }
 
     Logger.info("Sum of arrangement counts: " + arrangementCountSum);
