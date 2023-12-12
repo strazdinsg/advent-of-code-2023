@@ -1,8 +1,10 @@
 package problem.day12;
 
-import tools.Logger;
 import java.util.Arrays;
 
+/**
+ * Calculates spring pattern arrangements.
+ */
 public class Arrangements {
 
   private static final char BROKEN = '#';
@@ -13,13 +15,20 @@ public class Arrangements {
   private final int[] patternSizes;
   private int[] rightmostPositions;
 
+  private final PatternCountCache cache = new PatternCountCache();
+
+  /**
+   * Create an arrangement map.
+   *
+   * @param line The input line representing the arrangement pattern and spring sequence lengths
+   */
   public Arrangements(String line) {
     String[] parts = line.split(" ");
     if (parts.length != 2) {
       throw new IllegalArgumentException("Invalid line format: " + line);
     }
 
-    this.pattern = unfold(parts[0], "");
+    this.pattern = unfold(parts[0], "?");
     this.patternSizes = Arrays.stream(unfold(parts[1], ",").split(","))
         .mapToInt(Integer::parseInt)
         .toArray();
@@ -47,30 +56,46 @@ public class Arrangements {
     }
   }
 
+  /**
+   * Find the number of pattern counts for this arrangement.
+   *
+   * @return The number of different valid pattern counts
+   */
   public long findCount() {
-    return countPatternsStartingAt(0, 0, -1);
+    return getPatternsStartingAt(0, 0, -1);
   }
 
-  private long countPatternsStartingAt(int patternIndex, int startPosition, int prevEndPosition) {
+  private long getPatternsStartingAt(int patternIndex, int startPosition, int prevEndPosition) {
     long patternCount = 0;
     for (int position = startPosition; position <= rightmostPositions[patternIndex]; position++) {
       if (canPlacePatternAt(patternIndex, position, prevEndPosition)) {
-        int endPosition = position + patternSizes[patternIndex] - 1;
-        if (patternIndex < patternSizes.length - 1) {
-          int nextPatternStartPosition = position + patternSizes[patternIndex] + 1;
-          //Logger.info(patternIndex + " at " + position);
-          patternCount += countPatternsStartingAt(patternIndex + 1,
-              nextPatternStartPosition, endPosition);
-        } else {
-          // This is the last pattern to check
-          if (noBrokenPatternBetween(endPosition, pattern.length())) {
-            patternCount++;
-            //Logger.info(patternIndex + " at " + position + " == last");
+        Long patternsAtThisPosition = cache.load(patternIndex, position);
+        if (patternsAtThisPosition == null) {
+          patternsAtThisPosition = countPatternsStartingAt(patternIndex, position);
+          if (patternsAtThisPosition > 0) {
+            cache.store(patternIndex, position, patternsAtThisPosition);
           }
         }
+        patternCount += patternsAtThisPosition;
       }
     }
     return patternCount;
+  }
+
+  private long countPatternsStartingAt(int patternIndex, int position) {
+    long patternsAtThisPosition = 0;
+    int endPosition = position + patternSizes[patternIndex] - 1;
+    if (patternIndex < patternSizes.length - 1) {
+      int nextPatternStartPosition = position + patternSizes[patternIndex] + 1;
+      patternsAtThisPosition = getPatternsStartingAt(patternIndex + 1,
+          nextPatternStartPosition, endPosition);
+    } else {
+      // This is the last pattern to check
+      if (noBrokenPatternBetween(endPosition, pattern.length())) {
+        patternsAtThisPosition = 1;
+      }
+    }
+    return patternsAtThisPosition;
   }
 
   private boolean canBeSpaceAt(int position) {

@@ -1,9 +1,9 @@
 package problem.day12;
 
 
+import java.util.List;
 import tools.InputFile;
 import tools.Logger;
-import java.util.List;
 
 /**
  * Solution for the problem of Day 12
