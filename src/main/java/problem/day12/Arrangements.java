@@ -36,21 +36,25 @@ public class Arrangements {
   }
 
   public long findCount() {
-    return countPatternsStartingAt(0, 0);
+    return countPatternsStartingAt(0, 0, -1);
   }
 
-  private long countPatternsStartingAt(int patternIndex, int startPosition) {
+  private long countPatternsStartingAt(int patternIndex, int startPosition, int prevEndPosition) {
     long patternCount = 0;
     for (int position = startPosition; position <= rightmostPositions[patternIndex]; position++) {
-      if (canPlacePatternAt(patternIndex, position)) {
+      if (canPlacePatternAt(patternIndex, position, prevEndPosition)) {
+        int endPosition = position + patternSizes[patternIndex] - 1;
         if (patternIndex < patternSizes.length - 1) {
           int nextPatternStartPosition = position + patternSizes[patternIndex] + 1;
           Logger.info(patternIndex + " at " + position);
-          patternCount += countPatternsStartingAt(patternIndex + 1, nextPatternStartPosition);
+          patternCount += countPatternsStartingAt(patternIndex + 1,
+              nextPatternStartPosition, endPosition);
         } else {
           // This is the last pattern to check
-          patternCount++;
-          Logger.info(patternIndex + " at " + position + " == last");
+          if (noBrokenPatternBetween(endPosition, pattern.length())) {
+            patternCount++;
+            Logger.info(patternIndex + " at " + position + " == last");
+          }
         }
       }
     }
@@ -62,7 +66,7 @@ public class Arrangements {
     return c == EMPTY || c == UNKNOWN;
   }
 
-  private boolean canPlacePatternAt(int patternIndex, int position) {
+  private boolean canPlacePatternAt(int patternIndex, int position, int prevEndPosition) {
     boolean fits = true;
     int i = position;
     while (fits && i < position + patternSizes[patternIndex]) {
@@ -80,7 +84,17 @@ public class Arrangements {
       fits = canBeSpaceAt(position - 1);
     }
 
-    return fits;
+    return fits && noBrokenPatternBetween(prevEndPosition, position);
+  }
+
+  private boolean noBrokenPatternBetween(int pos1, int pos2) {
+    boolean noBroken = true;
+    int position = pos1 + 1;
+    while (noBroken && position < pos2) {
+      noBroken = pattern.charAt(position) != BROKEN;
+      ++position;
+    }
+    return noBroken;
   }
 
   private boolean canBeDamaged(char c) {
