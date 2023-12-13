@@ -37,11 +37,11 @@ public class MirrorMap {
     return n;
   }
 
-  public long findSymmetryCenter(long[] numbers) {
+  public long findSymmetryCenter(long[] numbers, boolean expectSmudge) {
     long symmetryCenter = 0;
     int i = 1;
     while (symmetryCenter == 0 && i < numbers.length) {
-      if (isSymmetry(numbers, i)) {
+      if (isSymmetry(numbers, i, expectSmudge)) {
         symmetryCenter = i;
       }
       i++;
@@ -49,7 +49,7 @@ public class MirrorMap {
     return symmetryCenter;
   }
 
-  private boolean isSymmetry(long[] numbers, int split) {
+  private boolean isSymmetry(long[] numbers, int split, boolean smudgeExpected) {
     int numbersToTheRight = numbers.length - split;
     int length = Math.min(split, numbersToTheRight);
     boolean symmetrical = true;
@@ -58,16 +58,28 @@ public class MirrorMap {
       long leftNumber = numbers[split - i];
       long rightNumber = numbers[split + i - 1];
       symmetrical = (leftNumber == rightNumber);
+      if (!symmetrical && smudgeExpected) {
+        // Smudge found, ignore it once
+        symmetrical = true;
+        smudgeExpected = false;
+      }
       i++;
     }
-    return symmetrical;
+    return symmetrical && !smudgeExpected;
   }
 
-  public long findColumSymmetry() {
-    return findSymmetryCenter(columns);
-  }
-
-  public long findRowSymmetry() {
-    return findSymmetryCenter(rows);
+  public long findSymmetryScore(boolean expectSmudge) {
+    long score;
+    long symmetry = findSymmetryCenter(columns, expectSmudge);
+    if (symmetry > 0) {
+      score = symmetry;
+    } else {
+      symmetry = findSymmetryCenter(rows, expectSmudge);
+      if (symmetry == 0) {
+        throw new IllegalStateException("A map has neither symmetrical rows, nor columns");
+      }
+      score = 100L * symmetry;
+    }
+    return score;
   }
 }
