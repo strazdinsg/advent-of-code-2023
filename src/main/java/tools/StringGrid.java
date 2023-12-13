@@ -139,4 +139,13 @@ public class StringGrid {
     }
     return positions;
   }
+
+  public String getColumnAsString(int columnIndex) {
+    assertColumnWithinBoundaries(columnIndex);
+    StringBuilder sb = new StringBuilder();
+    for (int rowIndex = 0; rowIndex < getRowCount(); ++rowIndex) {
+      sb.append(getCharacter(rowIndex, columnIndex));
+    }
+    return sb.toString();
+  }
 }
