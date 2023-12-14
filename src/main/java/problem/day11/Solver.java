@@ -32,7 +32,7 @@ public class Solver {
       return;
     }
 
-    GalaxyMap map = new GalaxyMap(inputFile.readAllIntoGridBuffer());
+    GalaxyMap map = new GalaxyMap(inputFile.readAllIntoStringGrid());
     map.findExpandedDistances();
     map.findGalaxies();
     Logger.info("Sum of distances: " + map.calculateDistances());

@@ -29,7 +29,7 @@ public class OutputFile {
    *
    * @param grid A string grid to write
    */
-  public void writeGrid(StringGrid grid) {
+  public void writeGrid(CharacterGrid grid) {
     for (int row = 0; row < grid.getRowCount(); ++row) {
       writer.println(grid.getRow(row));
     }

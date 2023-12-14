@@ -36,7 +36,7 @@ public class Solver {
       return;
     }
 
-    maze = new DoubleSizeMaze(inputFile.readAllIntoGridBuffer());
+    maze = new DoubleSizeMaze(inputFile.readAllIntoStringGrid());
     Vector start = maze.findStartPosition();
     Logger.info("Start position: " + start);
     maze.findLoop(start);

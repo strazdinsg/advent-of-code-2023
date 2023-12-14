@@ -30,21 +30,15 @@ public class Solver {
     }
 
     long sum = 0;
+    long fixedSum = 0;
     while (!inputFile.isEndOfFile()) {
-      StringGrid grid = inputFile.readAllIntoGridBuffer();
+      StringGrid grid = inputFile.readAllIntoStringGrid();
       MirrorMap map = new MirrorMap(grid);
-      long columnSymmetry = map.findColumSymmetry();
-      if (columnSymmetry > 0) {
-        sum += columnSymmetry;
-      } else {
-        long rowSymmetry = map.findRowSymmetry();
-        if (rowSymmetry == 0) {
-          throw new IllegalStateException("A grid has neither symmetrical rows, nor columns");
-        }
-        sum += 100L * rowSymmetry;
-      }
+      sum += map.findSymmetryScore(false);
+      fixedSum += map.findSymmetryScore(true);
     }
     Logger.info("Symmetry sum: " + sum);
+    Logger.info("Fixed symmetry sum: " + fixedSum);
   }
 }
 

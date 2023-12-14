@@ -130,14 +130,29 @@ public class InputFile {
    *
    * @return The file content as a StringGrid.
    */
-  public StringGrid readAllIntoGridBuffer() {
-    StringGrid buffer = new StringGrid();
+  public StringGrid readAllIntoStringGrid() {
+    StringGrid grid = new StringGrid();
+    readAllIntoGrid(grid);
+    return grid;
+  }
+
+  /**
+   * Read the content of a file (until the end or until an empty line) into a CharArrayGrid.
+   *
+   * @return The character array grid representing the file content
+   */
+  public CharArrayGrid readAllIntoCharGrid() {
+    CharArrayGrid grid = new CharArrayGrid();
+    readAllIntoGrid(grid);
+    return grid;
+  }
+
+  private void readAllIntoGrid(CharacterGrid grid) {
     String line = readLineAndDetectEnd();
     while (!isEndOfFile() && line != null && !line.isEmpty()) {
-      buffer.appendRow(line);
+      grid.appendRow(line);
       line = readLineAndDetectEnd();
     }
-    return buffer;
   }
 
   /**
