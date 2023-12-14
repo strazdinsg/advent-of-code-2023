@@ -1,17 +1,25 @@
 package problem.day13;
 
-import tools.StringGrid;
 import java.util.HashSet;
 import java.util.Set;
+import tools.StringGrid;
 
+/**
+ * A mirror map containing some rocks on it.
+ */
 public class MirrorMap {
   private static final char ROCK = '#';
   private static final int MAX_BITS = 20;
   private final StringGrid grid;
   private long[] rows;
   private long[] columns;
-  private final static Set<Long> bits = new HashSet<>();
+  private static final Set<Long> bits = new HashSet<>();
 
+  /**
+   * Create a mirror map.
+   *
+   * @param grid The grid representing the map
+   */
   public MirrorMap(StringGrid grid) {
     this.grid = grid;
     convertRowsToNumbers();
@@ -52,6 +60,13 @@ public class MirrorMap {
     }
   }
 
+  /**
+   * Find the symmetry center of a given number array.
+   *
+   * @param numbers      The array to check
+   * @param expectSmudge Whether to expect exactly one smudged bit in the numbers
+   * @return The symmetry center i, meaning that numbers i-1 and i are the same, i-2 and i+1, etc
+   */
   public long findSymmetryCenter(long[] numbers, boolean expectSmudge) {
     long symmetryCenter = 0;
     int i = 1;
@@ -94,6 +109,12 @@ public class MirrorMap {
     return bits.contains(Math.abs(n2 - n1));
   }
 
+  /**
+   * Find the symmetry score of this mirror map.
+   *
+   * @param expectSmudge Whether to expect exactly one smudged bit
+   * @return The symmetry score of this map
+   */
   public long findSymmetryScore(boolean expectSmudge) {
     long score;
     long symmetry = findSymmetryCenter(columns, expectSmudge);

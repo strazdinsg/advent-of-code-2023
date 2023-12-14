@@ -37,7 +37,7 @@ public class Solver {
       return;
     }
 
-    grid = inputFile.readAllIntoGridBuffer();
+    grid = inputFile.readAllIntoStringGrid();
     findPartNumbers();
     long partNumberSum = 0;
     for (PartNumber partNumber : partNumbers) {
