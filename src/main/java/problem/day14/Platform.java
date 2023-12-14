@@ -3,6 +3,7 @@ package problem.day14;
 import java.util.List;
 import tools.CharArrayGrid;
 import tools.CharacterGrid;
+import tools.Direction;
 import tools.Vector;
 
 /**
@@ -38,47 +39,58 @@ public class Platform {
   /**
    * Tilt the platform to the north leading to some rocks rolling to the north.
    */
-  public void tiltNorth() {
-    for (int row = 0; row < grid.getRowCount(); ++row) {
-      for (int column = 0; column < grid.getColumnCount(); ++column) {
-        if (isRoundedRock(row, column)) {
-          rollRockNorth(row, column);
-        }
-      }
+  public void tilt(Direction direction) {
+    int horizontalGradient = direction.getHorizontalGradient();
+    int verticalGradient = direction.getVerticalGradient();
+    List<Vector> rocks = grid.findCharacterLocations(ROUNDED_ROCK);
+    for (Vector rockPosition : rocks) {
+      rollRock(rockPosition, verticalGradient, horizontalGradient);
     }
-  }
-
-  private boolean isRoundedRock(int row, int column) {
-    return grid.getCharacter(row, column) == ROUNDED_ROCK;
   }
 
   private boolean isEmpty(int row, int column) {
-    return grid.getCharacter(row, column) == EMPTY;
+    return row >= 0 && row < grid.getRowCount() && column >= 0 && column < grid.getColumnCount()
+        && grid.getCharacter(row, column) == EMPTY;
   }
 
-  private void rollRockNorth(int row, int column) {
-    int newRow = findLastEmptyColumnAbove(row, column);
-    if (newRow >= 0) {
-      move(row, column, newRow, column);
+  private void rollRock(Vector rockPosition, int verticalGradient, int horizontalGradient) {
+    Vector newPosition = findLastEmptyCell(rockPosition, verticalGradient, horizontalGradient);
+    if (newPosition != null) {
+      move(rockPosition, newPosition);
     }
   }
 
-  private int findLastEmptyColumnAbove(int row, int column) {
-    int y = row - 1;
-    while (y >= 0 && isEmpty(y, column)) {
-      --y;
+  private Vector findLastEmptyCell(Vector rockPosition, int verticalGradient,
+                                   int horizontalGradient) {
+    int row = rockPosition.y() + verticalGradient;
+    int column = rockPosition.x() + horizontalGradient;
+
+    while (isEmpty(row, column)) {
+      row += verticalGradient;
+      column += horizontalGradient;
     }
-    y++; // Move back down one row
-    return isEmpty(y, column) ? y : -1;
+    row -= verticalGradient; // Move back one step
+    column -= horizontalGradient;
+    return isEmpty(row, column) ? new Vector(column, row) : null;
   }
 
-  private void move(int row, int column, int newRow, int newColumn) {
-    char c = grid.getCharacter(row, column);
-    grid.setCharacter(newRow, newColumn, c);
-    grid.setCharacter(row, column, EMPTY);
+  private void move(Vector position, Vector newPosition) {
+    char c = grid.getCharacter(position);
+    grid.setCharacter(newPosition.y(), newPosition.x(), c);
+    grid.setCharacter(position.y(), position.x(), EMPTY);
   }
 
   public CharacterGrid getGrid() {
     return grid;
+  }
+
+  /**
+   * Spin the platform for one cycle: north, west, south, east.
+   */
+  public void spinOneCycle() {
+    tilt(Direction.NORTH);
+    tilt(Direction.WEST);
+    tilt(Direction.SOUTH);
+    tilt(Direction.EAST);
   }
 }

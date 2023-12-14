@@ -2,9 +2,9 @@ package problem.day14;
 
 
 import tools.CharArrayGrid;
+import tools.Direction;
 import tools.InputFile;
 import tools.Logger;
-import tools.OutputFile;
 
 /**
  * Solution for the problem of Day 14
@@ -32,8 +32,8 @@ public class Solver {
 
     CharArrayGrid grid = inputFile.readAllIntoCharGrid();
     Platform platform = new Platform(grid);
-    platform.tiltNorth();
-    Logger.info("Total load: " + platform.getTotalVerticalLoad());
+    platform.tilt(Direction.NORTH);
+    Logger.info("Load: " + platform.getTotalVerticalLoad());
   }
 
 }
