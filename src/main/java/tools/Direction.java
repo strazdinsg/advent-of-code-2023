@@ -14,8 +14,8 @@ public enum Direction {
   public int getHorizontalGradient() {
     return switch (this) {
       case NORTH, SOUTH -> 0;
-      case EAST -> -1;
-      case WEST -> 1;
+      case WEST -> -1;
+      case EAST -> 1;
     };
   }
 

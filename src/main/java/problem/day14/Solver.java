@@ -32,8 +32,14 @@ public class Solver {
 
     CharArrayGrid grid = inputFile.readAllIntoCharGrid();
     Platform platform = new Platform(grid);
-    platform.tilt(Direction.NORTH);
-    Logger.info("Load: " + platform.getTotalVerticalLoad());
+    for (int i = 0; i < 1000; ++i) {
+      platform.spinOneCycle();
+      long load = platform.getTotalVerticalLoad();
+      Logger.info(i + ": " + load);
+    }
+    // Note: here I "cheated" a bit: I printed out the load numbers and found that they
+    // appear in a cycle. The cycle length is 11 elements. Element number 1000 turned out to
+    // be the same as element number 1000000000, which is the right answer
   }
 
 }
