@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * An abstract base class for keeping a grid of characters.
  */
-public abstract class CharacterGrid {
+public abstract class CharacterGrid implements Cloneable {
   /**
    * Append a row to the grid.
    *
@@ -124,6 +124,12 @@ public abstract class CharacterGrid {
   protected void assertRowWithinBoundaries(int rowIndex) {
     if (rowIndex < 0 || rowIndex >= getRowCount()) {
       throw new IllegalArgumentException("Invalid row, outside the grid: " + rowIndex);
+    }
+  }
+
+  public void debugLog() {
+    for (int row = 0; row < getRowCount(); ++row) {
+      Logger.info(getRow(row));
     }
   }
 }

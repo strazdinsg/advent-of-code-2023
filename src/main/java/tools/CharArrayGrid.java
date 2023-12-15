@@ -51,4 +51,22 @@ public class CharArrayGrid extends CharacterGrid {
     assertColumnWithinBoundaries(columnIndex);
     return chars.get(rowIndex).get(columnIndex);
   }
+
+  /**
+   * Create an expanded grid: an "almost clone" of this grid, with the only difference that the
+   * extended grid has one empty row and column around this one, with empty spaces.
+   *
+   * @return An expanded grid.
+   */
+  public CharArrayGrid cloneInExpandedGrid() {
+    CharArrayGrid expandedGrid = new CharArrayGrid();
+    String emptyRow = " ".repeat(getColumnCount() + 2);
+    expandedGrid.appendRow(emptyRow);
+    for (int row = 0; row < getRowCount(); ++row) {
+      String expandedRow = " " + getRow(row) + " ";
+      expandedGrid.appendRow(expandedRow);
+    }
+    expandedGrid.appendRow(emptyRow);
+    return expandedGrid;
+  }
 }

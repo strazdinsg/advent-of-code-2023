@@ -1,6 +1,7 @@
 package problem.day13;
 
 
+import tools.CharArrayGrid;
 import tools.InputFile;
 import tools.Logger;
 import tools.StringGrid;
@@ -31,11 +32,14 @@ public class Solver {
 
     long sum = 0;
     long fixedSum = 0;
+    int i = 1;
     while (!inputFile.isEndOfFile()) {
-      StringGrid grid = inputFile.readAllIntoStringGrid();
+      Logger.info("Grid " + i);
+      CharArrayGrid grid = inputFile.readAllIntoCharGrid();
       MirrorMap map = new MirrorMap(grid);
       sum += map.findSymmetryScore(false);
       fixedSum += map.findSymmetryScore(true);
+      i++;
     }
     Logger.info("Symmetry sum: " + sum);
     Logger.info("Fixed symmetry sum: " + fixedSum);
