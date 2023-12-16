@@ -54,8 +54,6 @@ public class Cave {
       LightBeam light = toVisit.poll();
       if (!visited.contains(light)) {
         visit(light);
-      } else {
-        Logger.info("Already visited " + light);
       }
     }
   }
@@ -64,7 +62,6 @@ public class Cave {
     energized[light.position().y()][light.position().x()] = true;
     visited.add(light);
     char c = grid.getCharacter(light.position());
-    Logger.info("" + light);
     switch (c) {
       case EMPTY:
         continueBeam(light);

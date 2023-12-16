@@ -43,7 +43,7 @@ public class Solver {
       updateMaxEnergy(0, column, Direction.SOUTH);
       updateMaxEnergy(grid.getRowCount() - 1, column, Direction.NORTH);
     }
-    Logger.info("Energized tile count: " + maxEnergy);
+    Logger.info("Max energized tile count: " + maxEnergy);
   }
 
   private void updateMaxEnergy(int row, int column, Direction direction) {
