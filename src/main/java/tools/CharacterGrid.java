@@ -127,6 +127,9 @@ public abstract class CharacterGrid implements Cloneable {
     }
   }
 
+  /**
+   * Print the grid to the console, for debugging.
+   */
   public void debugLog() {
     for (int row = 0; row < getRowCount(); ++row) {
       Logger.info(getRow(row));

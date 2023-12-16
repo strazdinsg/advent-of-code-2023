@@ -108,7 +108,7 @@ public class MirrorMap {
       if (!symmetrical && smudgeExpected) {
         Integer smudgedBitPosition = findSmudgedBitPosition(leftNumber, rightNumber);
         if (smudgedBitPosition != null) {
-          flipBitInGrid(split -i, smudgedBitPosition, isRow);
+          flipBitInGrid(split - i, smudgedBitPosition, isRow);
           // Smudge found, ignore it once, remember that this bit was smudged
           symmetrical = true;
           smudgeExpected = false;
@@ -192,7 +192,7 @@ public class MirrorMap {
     if (isRow) {
       extGrid.setCharacter(symmetryCenter, 0, 'v');
       extGrid.setCharacter(symmetryCenter + 1, 0, '^');
-      extGrid.setCharacter(symmetryCenter, extGrid.getColumnCount()  -1, 'v');
+      extGrid.setCharacter(symmetryCenter, extGrid.getColumnCount() - 1, 'v');
       extGrid.setCharacter(symmetryCenter + 1, extGrid.getColumnCount() - 1, '^');
     } else {
       extGrid.setCharacter(0, symmetryCenter, '>');
