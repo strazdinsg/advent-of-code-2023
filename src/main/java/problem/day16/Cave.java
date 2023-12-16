@@ -11,7 +11,6 @@ import java.util.Queue;
 import java.util.Set;
 import tools.CharArrayGrid;
 import tools.Direction;
-import tools.Logger;
 import tools.Vector;
 
 /**
@@ -26,7 +25,7 @@ public class Cave {
   private static final Vector VERTICAL = new Vector(0, 1);
   private static final Vector HORIZONTAL = new Vector(1, 0);
   private final CharArrayGrid grid;
-  private final boolean[][] energized;
+  private final Set<Vector> energized = new HashSet<>();
   private Queue<LightBeam> toVisit = new ArrayDeque<>();
   private Set<LightBeam> visited = new HashSet<>();
 
@@ -37,10 +36,6 @@ public class Cave {
    */
   public Cave(CharArrayGrid grid) {
     this.grid = grid;
-    energized = new boolean[grid.getRowCount()][];
-    for (int row = 0; row < grid.getRowCount(); ++row) {
-      energized[row] = new boolean[grid.getColumnCount()];
-    }
   }
 
   /**
@@ -59,7 +54,7 @@ public class Cave {
   }
 
   private void visit(LightBeam light) {
-    energized[light.position().y()][light.position().x()] = true;
+    energized.add(light.position());
     visited.add(light);
     char c = grid.getCharacter(light.position());
     switch (c) {
@@ -164,12 +159,6 @@ public class Cave {
    * @return The number of energized tiles
    */
   public long getEnergizedTileCount() {
-    long energizedCellCount = 0;
-    for (int row = 0; row < energized.length; ++row) {
-      for (int column = 0; column < energized[0].length; ++column) {
-        energizedCellCount += energized[row][column] ? 1 : 0;
-      }
-    }
-    return energizedCellCount;
+    return energized.size();
   }
 }
