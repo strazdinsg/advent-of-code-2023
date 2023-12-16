@@ -35,7 +35,7 @@ public class Solver {
     int i = 1;
     while (!inputFile.isEndOfFile()) {
       Logger.info("Grid " + i);
-      CharArrayGrid grid = inputFile.readAllIntoCharGrid();
+      StringGrid grid = inputFile.readAllIntoStringGrid();
       MirrorMap map = new MirrorMap(grid);
       sum += map.findSymmetryScore(false);
       fixedSum += map.findSymmetryScore(true);
