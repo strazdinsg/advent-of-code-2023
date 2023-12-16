@@ -1,16 +1,22 @@
 package problem.day16;
 
-import static tools.Direction.*;
+import static tools.Direction.EAST;
+import static tools.Direction.NORTH;
+import static tools.Direction.SOUTH;
+import static tools.Direction.WEST;
 
-import tools.CharArrayGrid;
-import tools.Direction;
-import tools.Logger;
-import tools.Vector;
 import java.util.ArrayDeque;
 import java.util.HashSet;
 import java.util.Queue;
 import java.util.Set;
+import tools.CharArrayGrid;
+import tools.Direction;
+import tools.Logger;
+import tools.Vector;
 
+/**
+ * A cave full of mirrors.
+ */
 public class Cave {
   private static final char EMPTY = '.';
   private static final char VERTICAL_SPLITTER = '|';
@@ -21,9 +27,14 @@ public class Cave {
   private static final Vector HORIZONTAL = new Vector(1, 0);
   private final CharArrayGrid grid;
   private final boolean[][] energized;
-  private Queue<LightQuantum> toVisit = new ArrayDeque<>();
-  private Set<LightQuantum> visited = new HashSet<>();
+  private Queue<LightBeam> toVisit = new ArrayDeque<>();
+  private Set<LightBeam> visited = new HashSet<>();
 
+  /**
+   * Create a cave.
+   *
+   * @param grid The grid with the mirror map.
+   */
   public Cave(CharArrayGrid grid) {
     this.grid = grid;
     energized = new boolean[grid.getRowCount()][];
@@ -32,10 +43,15 @@ public class Cave {
     }
   }
 
-  public void bounceLight() {
-    toVisit.add(new LightQuantum(new Vector(0, 0), EAST));
+  /**
+   * Shine the light inside the cave, let it bounce across all the mirrors.
+   *
+   * @param enteringLight The light beam that enters the cave
+   */
+  public void bounceLight(LightBeam enteringLight) {
+    toVisit.add(enteringLight);
     while (!toVisit.isEmpty()) {
-      LightQuantum light = toVisit.poll();
+      LightBeam light = toVisit.poll();
       if (!visited.contains(light)) {
         visit(light);
       } else {
@@ -44,7 +60,7 @@ public class Cave {
     }
   }
 
-  private void visit(LightQuantum light) {
+  private void visit(LightBeam light) {
     energized[light.position().y()][light.position().x()] = true;
     visited.add(light);
     char c = grid.getCharacter(light.position());
@@ -79,7 +95,7 @@ public class Cave {
   }
 
 
-  private void continueBeam(LightQuantum light) {
+  private void continueBeam(LightBeam light) {
     Vector nextPosition = switch (light.direction()) {
       case NORTH -> light.position().minus(VERTICAL);
       case EAST -> light.position().plus(HORIZONTAL);
@@ -91,11 +107,11 @@ public class Cave {
 
   private void lightEnters(Vector position, Direction direction) {
     if (grid.isWithin(position)) {
-      toVisit.add(new LightQuantum(position, direction));
+      toVisit.add(new LightBeam(position, direction));
     }
   }
 
-  private void splitBeam(LightQuantum light) {
+  private void splitBeam(LightBeam light) {
     if (light.direction().isHorizontal()) {
       lightEnters(light.position().minus(VERTICAL), NORTH);
       lightEnters(light.position().plus(VERTICAL), SOUTH);
@@ -105,7 +121,7 @@ public class Cave {
     }
   }
 
-  private void rotateNorthEast(LightQuantum light) {
+  private void rotateNorthEast(LightBeam light) {
     switch (light.direction()) {
       case NORTH:
         lightEnters(light.position().plus(HORIZONTAL), EAST);
@@ -119,10 +135,13 @@ public class Cave {
       case WEST:
         lightEnters(light.position().plus(VERTICAL), SOUTH);
         break;
-    };
+      default:
+        throw new IllegalArgumentException("Unsupported direction: " + light.direction());
+    }
+    ;
   }
 
-  private void rotateNorthWest(LightQuantum light) {
+  private void rotateNorthWest(LightBeam light) {
     switch (light.direction()) {
       case NORTH:
         lightEnters(light.position().minus(HORIZONTAL), WEST);
@@ -136,9 +155,17 @@ public class Cave {
       case WEST:
         lightEnters(light.position().minus(VERTICAL), NORTH);
         break;
-    };
+      default:
+        throw new IllegalArgumentException("Unsupported direction: " + light.direction());
+    }
+    ;
   }
 
+  /**
+   * Calculate the number of energized tiles after bouncing the light in the cave.
+   *
+   * @return The number of energized tiles
+   */
   public long getEnergizedTileCount() {
     long energizedCellCount = 0;
     for (int row = 0; row < energized.length; ++row) {
