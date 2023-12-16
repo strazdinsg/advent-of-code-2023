@@ -132,4 +132,9 @@ public abstract class CharacterGrid implements Cloneable {
       Logger.info(getRow(row));
     }
   }
+
+  public boolean isWithin(Vector position) {
+    return position.y() >= 0 && position.y() < getRowCount()
+        && position.x() >= 0 && position.x() < getColumnCount();
+  }
 }
