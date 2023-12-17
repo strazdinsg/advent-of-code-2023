@@ -130,7 +130,6 @@ public class Cave {
       default:
         throw new IllegalArgumentException("Unsupported direction: " + light.direction());
     }
-    ;
   }
 
   private void rotateNorthWest(LightBeam light) {
@@ -150,7 +149,6 @@ public class Cave {
       default:
         throw new IllegalArgumentException("Unsupported direction: " + light.direction());
     }
-    ;
   }
 
   /**

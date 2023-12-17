@@ -63,12 +63,10 @@ public class MirrorMap {
       String right = strings[split + i - 1];
       int bitDifferences = findDifference(left, right);
       symmetrical = bitDifferences == 0;
-      if (!symmetrical && smudgeExpected) {
-        if (bitDifferences == 1) {
-          // Smudge found, ignore it once, remember that this bit was smudged
-          symmetrical = true;
-          smudgeExpected = false;
-        }
+      if (!symmetrical && smudgeExpected && bitDifferences == 1) {
+        // Smudge found, ignore it once, remember that this bit was smudged
+        symmetrical = true;
+        smudgeExpected = false;
       }
       i++;
     }

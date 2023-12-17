@@ -1,7 +1,6 @@
 package problem.day13;
 
 
-import tools.CharArrayGrid;
 import tools.InputFile;
 import tools.Logger;
 import tools.StringGrid;

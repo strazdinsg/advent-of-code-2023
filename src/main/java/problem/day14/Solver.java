@@ -2,7 +2,6 @@ package problem.day14;
 
 
 import tools.CharArrayGrid;
-import tools.Direction;
 import tools.InputFile;
 import tools.Logger;
 

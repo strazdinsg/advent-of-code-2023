@@ -5,7 +5,6 @@ import java.util.List;
 import tools.CharArrayGrid;
 import tools.CharacterGrid;
 import tools.Direction;
-import tools.OutputFile;
 import tools.Vector;
 
 /**
@@ -15,7 +14,6 @@ public class Platform {
   private static final char ROUNDED_ROCK = 'O';
   private static final char EMPTY = '.';
   private final CharArrayGrid grid;
-  private OutputFile outputFile;
 
   public Platform(CharArrayGrid grid) {
     this.grid = grid;
