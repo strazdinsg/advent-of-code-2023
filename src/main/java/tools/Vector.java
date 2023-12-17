@@ -84,4 +84,13 @@ public record Vector(int x, int y) {
   public String toString() {
     return "(" + x + "," + y + ")";
   }
+
+  public Vector step(Direction d) {
+    return switch (d) {
+      case NORTH -> this.plus(0, -1);
+      case WEST -> this.plus(-1, 0);
+      case SOUTH -> this.plus(0, 1);
+      case EAST -> this.plus(1, 0);
+    };
+  }
 }

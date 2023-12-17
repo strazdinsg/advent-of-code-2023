@@ -35,4 +35,13 @@ public enum Direction {
   public boolean isHorizontal() {
     return this == EAST || this == WEST;
   }
+
+  public boolean isOppositeTo(Direction direction) {
+    return switch (this) {
+      case NORTH -> direction == SOUTH;
+      case WEST -> direction == EAST;
+      case SOUTH -> direction == NORTH;
+      case EAST -> direction == WEST;
+    };
+  }
 }
