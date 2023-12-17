@@ -28,6 +28,10 @@ public class Solver {
       return;
     }
 
+    // Part 2
+    DirectionalMove.minMovesInOneDirection = 4;
+    DirectionalMove.maxMovesInOneDirection = 10;
+
     Maze maze = new Maze(inputFile.readAllIntoCharGrid());
     Logger.info("Shortest path: " + maze.findShortestPath());
   }

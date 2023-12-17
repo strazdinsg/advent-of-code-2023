@@ -1,17 +1,25 @@
 package problem.day17;
 
+import java.util.ArrayDeque;
+import java.util.Queue;
 import tools.CharArrayGrid;
 import tools.Direction;
 import tools.Logger;
 import tools.Vector;
-import java.util.ArrayDeque;
-import java.util.Queue;
 
+/**
+ * A maze consisting of blocks.
+ */
 public class Maze {
   private final CharArrayGrid grid;
   private Block[][] blocks;
   private final Queue<Vector> toVisit = new ArrayDeque<>();
 
+  /**
+   * Create a maze.
+   *
+   * @param grid The grid describing the blocks of the maze.
+   */
   public Maze(CharArrayGrid grid) {
     this.grid = grid;
     initializeBlocks();
@@ -28,6 +36,11 @@ public class Maze {
     }
   }
 
+  /**
+   * Find the shortest path in the maze, start in the top-left corner.
+   *
+   * @return The energy loss along the shortest path.
+   */
   public long findShortestPath() {
     toVisit.add(new Vector(0, 0));
     blocks[0][0].setAsStart();

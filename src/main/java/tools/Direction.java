@@ -36,12 +36,17 @@ public enum Direction {
     return this == EAST || this == WEST;
   }
 
-  public boolean isOppositeTo(Direction direction) {
+  /**
+   * Get the opposite direction of this one.
+   *
+   * @return The opposite direction
+   */
+  public Direction getOpposite() {
     return switch (this) {
-      case NORTH -> direction == SOUTH;
-      case WEST -> direction == EAST;
-      case SOUTH -> direction == NORTH;
-      case EAST -> direction == WEST;
+      case NORTH -> SOUTH;
+      case WEST -> EAST;
+      case SOUTH -> NORTH;
+      case EAST -> WEST;
     };
   }
 }

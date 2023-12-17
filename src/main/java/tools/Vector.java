@@ -85,6 +85,12 @@ public record Vector(int x, int y) {
     return "(" + x + "," + y + ")";
   }
 
+  /**
+   * Create a new vector by moving one unit in the specified direction.
+   *
+   * @param d The direction in which to move from the vector
+   * @return A new vector with the specified destination
+   */
   public Vector step(Direction d) {
     return switch (d) {
       case NORTH -> this.plus(0, -1);
