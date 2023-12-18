@@ -87,7 +87,7 @@ public class Rectangle {
    *
    * @return The width
    */
-  public int getWidth() {
+  public long getWidth() {
     return bottomRight.x() - topLeft.x() + 1;
   }
 
@@ -96,7 +96,7 @@ public class Rectangle {
    *
    * @return The height
    */
-  public int getHeight() {
+  public long getHeight() {
     return bottomRight.y() - topLeft.y() + 1;
   }
 
