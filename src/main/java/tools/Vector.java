@@ -1,5 +1,7 @@
 package tools;
 
+import java.util.Objects;
+
 /**
  * A two-dimensional position (vector).
  *
@@ -7,6 +9,7 @@ package tools;
  * @param y The y-dimension of the position
  */
 public record Vector(int x, int y) {
+  public static final Vector ZERO = new Vector(0, 0);
   /**
    * Checks if this is a zero vector.
    *
@@ -83,5 +86,33 @@ public record Vector(int x, int y) {
   @Override
   public String toString() {
     return "(" + x + "," + y + ")";
+  }
+
+  /**
+   * Create a new vector by moving one unit in the specified direction.
+   *
+   * @param d The direction in which to move from the vector
+   * @return A new vector with the specified destination
+   */
+  public Vector step(Direction d) {
+    return switch (d) {
+      case NORTH -> this.plus(0, -1);
+      case WEST -> this.plus(-1, 0);
+      case SOUTH -> this.plus(0, 1);
+      case EAST -> this.plus(1, 0);
+    };
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Vector vector = (Vector) o;
+    return x == vector.x && y == vector.y;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(x, y);
   }
 }

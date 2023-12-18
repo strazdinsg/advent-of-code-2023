@@ -11,6 +11,15 @@ import java.util.List;
 public class CharArrayGrid extends CharacterGrid {
   private final List<CharArray> chars = new ArrayList<>();
 
+  public static CharArrayGrid create(int rows, int columns, char fill) {
+    CharArrayGrid grid = new CharArrayGrid();
+    String emptyRow = ("" + fill).repeat(columns);
+    for (int row = 0; row < rows; ++row) {
+      grid.chars.add(new CharArray(emptyRow));
+    }
+    return grid;
+  }
+
   @Override
   public void appendRow(String row) throws IllegalArgumentException {
     chars.add(new CharArray(row));
@@ -50,5 +59,23 @@ public class CharArrayGrid extends CharacterGrid {
     assertRowWithinBoundaries(rowIndex);
     assertColumnWithinBoundaries(columnIndex);
     return chars.get(rowIndex).get(columnIndex);
+  }
+
+  /**
+   * Create an expanded grid: an "almost clone" of this grid, with the only difference that the
+   * extended grid has one empty row and column around this one, with empty spaces.
+   *
+   * @return An expanded grid.
+   */
+  public CharArrayGrid cloneInExpandedGrid() {
+    CharArrayGrid expandedGrid = new CharArrayGrid();
+    String emptyRow = " ".repeat(getColumnCount() + 2);
+    expandedGrid.appendRow(emptyRow);
+    for (int row = 0; row < getRowCount(); ++row) {
+      String expandedRow = " " + getRow(row) + " ";
+      expandedGrid.appendRow(expandedRow);
+    }
+    expandedGrid.appendRow(emptyRow);
+    return expandedGrid;
   }
 }

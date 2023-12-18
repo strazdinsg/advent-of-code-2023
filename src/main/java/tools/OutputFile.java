@@ -35,6 +35,15 @@ public class OutputFile {
     }
   }
 
+  /**
+   * Write one line to the file, add a newline.
+   *
+   * @param line The line to write to the file
+   */
+  public void writeLine(String line) {
+    writer.println(line);
+  }
+
   public void close() {
     writer.close();
   }
