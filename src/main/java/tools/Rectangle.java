@@ -172,4 +172,13 @@ public class Rectangle {
   public boolean isWithin(int x, int y) {
     return x >= getMinX() && x <= getMaxX() && y >= getMinY() && y <= getMaxY();
   }
+
+  /**
+   * Create another rectangle with the same dimensions and the top-left corner at (0, 0)
+   *
+   * @return The normalized rectangle
+   */
+  public Rectangle moveToOrigin() {
+    return this.minus(topLeft);
+  }
 }

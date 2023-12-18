@@ -11,6 +11,15 @@ import java.util.List;
 public class CharArrayGrid extends CharacterGrid {
   private final List<CharArray> chars = new ArrayList<>();
 
+  public static CharArrayGrid create(int rows, int columns, char fill) {
+    CharArrayGrid grid = new CharArrayGrid();
+    String emptyRow = ("" + fill).repeat(columns);
+    for (int row = 0; row < rows; ++row) {
+      grid.chars.add(new CharArray(emptyRow));
+    }
+    return grid;
+  }
+
   @Override
   public void appendRow(String row) throws IllegalArgumentException {
     chars.add(new CharArray(row));

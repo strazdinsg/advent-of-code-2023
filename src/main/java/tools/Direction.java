@@ -6,6 +6,16 @@ package tools;
 public enum Direction {
   NORTH, WEST, SOUTH, EAST;
 
+  public static Direction fromRelative(char dir) {
+    return switch (dir) {
+      case 'U' -> NORTH;
+      case 'D' -> SOUTH;
+      case 'L' -> WEST;
+      case 'R' -> EAST;
+      default -> throw new IllegalArgumentException("Invalid relative direction: " + dir);
+    };
+  }
+
   /**
    * Get the horizontal gradient for this position.
    *
