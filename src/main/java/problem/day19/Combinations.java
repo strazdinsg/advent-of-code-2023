@@ -1,18 +1,21 @@
 package problem.day19;
 
-import tools.IntegerRange;
-import tools.NonOverlappingRanges;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import tools.IntegerRange;
+import tools.NonOverlappingRanges;
 
+/**
+ * Keep a list of allowed combinations for all the xmas properties.
+ */
 public class Combinations {
   private static final long MIN_VALUE = 1;
   private static final long MAX_VALUE = 4000;
   private final Map<Character, NonOverlappingRanges> propertyRanges = new HashMap<>();
 
   /**
-   * Don't allow direct instantiation
+   * Don't allow direct instantiation.
    */
   private Combinations() {
 
@@ -38,6 +41,11 @@ public class Combinations {
     return ranges;
   }
 
+  /**
+   * Create an empty combination collection - no possible combinations.
+   *
+   * @return Empty combinations collection
+   */
   public static Combinations empty() {
     Combinations combinations = new Combinations();
     combinations.propertyRanges.put('x', createEmptyRange());
@@ -51,6 +59,11 @@ public class Combinations {
     return new NonOverlappingRanges();
   }
 
+  /**
+   * Get the total number of combinations of all the allowed property ranges.
+   *
+   * @return The total number of combinations.
+   */
   public long count() {
     long count = 1;
     for (Character property : propertyRanges.keySet()) {
@@ -110,6 +123,11 @@ public class Combinations {
     return empty;
   }
 
+  /**
+   * Add the given combinations to this object.
+   *
+   * @param c The combinations to add
+   */
   public void add(Combinations c) {
     for (var entry : propertyRanges.entrySet()) {
       Character property = entry.getKey();

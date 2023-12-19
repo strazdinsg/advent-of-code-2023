@@ -179,6 +179,11 @@ public class NonOverlappingRanges {
     return Math.min(ranges.get(0).getEnd(), ranges.get(1).getEnd()) + 1;
   }
 
+  /**
+   * Get the sum of lengths of all the ranges.
+   *
+   * @return The total length of all ranges.
+   */
   public long getTotalLength() {
     long length = 0;
     for (IntegerRange range : ranges) {
@@ -187,22 +192,42 @@ public class NonOverlappingRanges {
     return length;
   }
 
+  /**
+   * Check whether there are no ranges.
+   *
+   * @return True when there are no ranges
+   */
   public boolean isEmpty() {
     return getTotalLength() == 0;
   }
 
+  /**
+   * Add all the given ranges to this one. Note: copies of the ranges will be added!
+   *
+   * @param r The non overlapping ranges to add to this one.
+   */
   public void addAll(NonOverlappingRanges r) {
     for (IntegerRange range : r.ranges) {
       add(new IntegerRange(range.getStart(), range.getEnd()));
     }
   }
 
+  /**
+   * Create a deep copy of this object.
+   *
+   * @return A copy of this object
+   */
   public NonOverlappingRanges createCopy() {
     NonOverlappingRanges r = new NonOverlappingRanges();
     r.addAll(this);
     return r;
   }
 
+  /**
+   * Remove all ranges (and cut parts of them) lower than the given threshold.
+   *
+   * @param n The threshold
+   */
   public void removeAllLowerThan(int n) {
     removeTotallyCovered(new IntegerRange(Long.MIN_VALUE, n - 1));
     IntegerRange partlyCoveringRange = findStartRangeFor(new IntegerRange(n - 1, Long.MAX_VALUE));
@@ -211,6 +236,11 @@ public class NonOverlappingRanges {
     }
   }
 
+  /**
+   * Remove all ranges (and cut parts of them) greater than the given threshold.
+   *
+   * @param n The threshold
+   */
   public void removeAllGreaterThan(int n) {
     removeTotallyCovered(new IntegerRange(n + 1, Long.MAX_VALUE));
     IntegerRange partlyCoveringRange = findEndRangeFor(new IntegerRange(Long.MIN_VALUE, n - 1));

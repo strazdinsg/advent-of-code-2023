@@ -2,6 +2,12 @@ package problem.day18;
 
 import tools.Vector;
 
+/**
+ * An edge for a polygon.
+ *
+ * @param start Start coordinate of the edge
+ * @param end   End coordinate of the edge
+ */
 public record Edge(Vector start, Vector end) {
 
   @Override

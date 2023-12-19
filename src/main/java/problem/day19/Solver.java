@@ -1,10 +1,9 @@
 package problem.day19;
 
-
-import tools.InputFile;
-import tools.Logger;
 import java.util.LinkedList;
 import java.util.List;
+import tools.InputFile;
+import tools.Logger;
 
 /**
  * Solution for the problem of Day 19

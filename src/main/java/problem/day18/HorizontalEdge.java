@@ -12,6 +12,12 @@ import java.util.List;
  */
 public record HorizontalEdge(long left, long right, long y) implements Comparable<HorizontalEdge> {
 
+  /**
+   * Create a horizontal edge from a given edge.
+   *
+   * @param edge The edge to use as a basis.
+   * @return A horizontal edge, clone of the given edge
+   */
   public static HorizontalEdge createFrom(Edge edge) {
     int y = edge.start().y();
     int x1 = edge.start().x();
@@ -40,6 +46,12 @@ public record HorizontalEdge(long left, long right, long y) implements Comparabl
     return this.left <= x && this.right >= x;
   }
 
+  /**
+   * Get a new horizontal edge, which corresponds to the intersection part of this edge and e.
+   *
+   * @param e The projection edge to use
+   * @return a projected horizontal edge with the same y coordinate as this one
+   */
   public HorizontalEdge getIntersectedPart(HorizontalEdge e) {
     if (!projectionIntersects(e)) {
       throw new IllegalArgumentException(e + " does not intersect with " + this);
@@ -47,6 +59,12 @@ public record HorizontalEdge(long left, long right, long y) implements Comparabl
     return new HorizontalEdge(Math.max(this.left, e.left), Math.min(this.right, e.right), y);
   }
 
+  /**
+   * Create a new list with the given edge "subtracted".
+   *
+   * @param e The edge to remove
+   * @return a new list with horizontal edges, where a projection of the given edge is removed.
+   */
   public List<HorizontalEdge> minus(HorizontalEdge e) {
     List<HorizontalEdge> edges = new LinkedList<>();
     if (!projectionIntersects(e)) {

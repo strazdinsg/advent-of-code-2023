@@ -1,11 +1,21 @@
 package problem.day18;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.PriorityQueue;
 import tools.Logger;
-import java.util.*;
 
+/**
+ * A painting with horizontal and vertical edges.
+ */
 public class Painting {
-  private final PriorityQueue<HorizontalEdge>  sortedEdges = new PriorityQueue<>();
+  private final PriorityQueue<HorizontalEdge> sortedEdges = new PriorityQueue<>();
 
+  /**
+   * Add a list of edges to the painting.
+   *
+   * @param edges The edges to add.
+   */
   public void add(List<Edge> edges) {
     for (Edge edge : edges) {
       if (edge.isHorizontal()) {
@@ -14,7 +24,12 @@ public class Painting {
     }
   }
 
-  public long findInteriorArea() {
+  /**
+   * Find the painted area.
+   *
+   * @return The total painted area, including the interior and the edges.
+   */
+  public long findArea() {
     long area = 0;
     printEdges();
     while (!sortedEdges.isEmpty()) {

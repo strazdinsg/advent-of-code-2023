@@ -2,6 +2,13 @@ package problem.day19;
 
 import tools.NonOverlappingRanges;
 
+/**
+ * A condition to check.
+ *
+ * @param property   The property to check
+ * @param comparison The comparison type (greater or less than)
+ * @param threshold  The threshold value
+ */
 public record Condition(char property, Comparison comparison, int threshold) {
   @Override
   public String toString() {
@@ -13,6 +20,12 @@ public record Condition(char property, Comparison comparison, int threshold) {
     return comparison == Comparison.GREATER_THAN ? value > threshold : value < threshold;
   }
 
+  /**
+   * Apply the condition to allowed ranges of a given property.
+   *
+   * @param prop   The property to filter
+   * @param ranges The ranges to constrain with this condition
+   */
   public void applyTo(char prop, NonOverlappingRanges ranges) {
     if (prop == property) {
       if (comparison == Comparison.GREATER_THAN) {
@@ -23,6 +36,11 @@ public record Condition(char property, Comparison comparison, int threshold) {
     }
   }
 
+  /**
+   * Create an opposite condition.
+   *
+   * @return A new condition, opposite to this one
+   */
   public Condition reverse() {
     Comparison comp;
     int t;

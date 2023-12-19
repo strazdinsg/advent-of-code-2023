@@ -1,12 +1,11 @@
 package problem.day18;
 
-
+import java.util.LinkedList;
+import java.util.List;
 import tools.Direction;
 import tools.InputFile;
 import tools.Logger;
 import tools.Vector;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Solution for the problem of Day 18
@@ -42,7 +41,7 @@ public class Solver {
     }
     Painting painting = new Painting();
     painting.add(edges);
-    Logger.info("Total size: " + painting.findInteriorArea());
+    Logger.info("Total size: " + painting.findArea());
   }
 
   private Edge parseEdge(String line) {

@@ -10,6 +10,7 @@ import java.util.Objects;
  */
 public record Vector(int x, int y) {
   public static final Vector ZERO = new Vector(0, 0);
+
   /**
    * Checks if this is a zero vector.
    *
@@ -105,8 +106,12 @@ public record Vector(int x, int y) {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
     Vector vector = (Vector) o;
     return x == vector.x && y == vector.y;
   }

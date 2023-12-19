@@ -174,7 +174,7 @@ public class Rectangle {
   }
 
   /**
-   * Create another rectangle with the same dimensions and the top-left corner at (0, 0)
+   * Create another rectangle with the same dimensions and the top-left corner at (0, 0).
    *
    * @return The normalized rectangle
    */

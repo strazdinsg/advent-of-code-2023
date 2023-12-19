@@ -3,6 +3,9 @@ package problem.day19;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A system of part processing workflows.
+ */
 public class WorkflowSystem {
   private static final String START_WORKFLOW_NAME = "in";
   private static final String REJECT_WORKFLOW_NAME = "R";
@@ -13,6 +16,12 @@ public class WorkflowSystem {
     workflows.put(workflow.name(), workflow);
   }
 
+  /**
+   * Process a part through all the workflows until it is either accepted or rejected.
+   *
+   * @param part The part to process
+   * @return True when the part is accepted, false when rejected
+   */
   public boolean process(Part part) {
     String workflowName = START_WORKFLOW_NAME;
     while (!workflowName.equals(ACCEPT_WORKFLOW_NAME)
