@@ -160,4 +160,12 @@ public class IntegerRange {
     validate();
   }
 
+  /**
+   * Create a copy of this range.
+   *
+   * @return A new IntegerRange, with cloned properties
+   */
+  public IntegerRange createCopy() {
+    return new IntegerRange(start, end);
+  }
 }

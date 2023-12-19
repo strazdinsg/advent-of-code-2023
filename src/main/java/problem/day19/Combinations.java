@@ -12,7 +12,7 @@ import tools.NonOverlappingRanges;
 public class Combinations {
   private static final long MIN_VALUE = 1;
   private static final long MAX_VALUE = 4000;
-  private final Map<Character, NonOverlappingRanges> propertyRanges = new HashMap<>();
+  private final Map<Character, IntegerRange> propertyRanges = new HashMap<>();
 
   /**
    * Don't allow direct instantiation.
@@ -35,10 +35,8 @@ public class Combinations {
     return combinations;
   }
 
-  private static NonOverlappingRanges createWholeRange() {
-    NonOverlappingRanges ranges = new NonOverlappingRanges();
-    ranges.add(new IntegerRange(MIN_VALUE, MAX_VALUE));
-    return ranges;
+  private static IntegerRange createWholeRange() {
+    return new IntegerRange(MIN_VALUE, MAX_VALUE);
   }
 
   /**
@@ -48,15 +46,11 @@ public class Combinations {
    */
   public static Combinations empty() {
     Combinations combinations = new Combinations();
-    combinations.propertyRanges.put('x', createEmptyRange());
-    combinations.propertyRanges.put('m', createEmptyRange());
-    combinations.propertyRanges.put('a', createEmptyRange());
-    combinations.propertyRanges.put('s', createEmptyRange());
+    combinations.propertyRanges.put('x', null);
+    combinations.propertyRanges.put('m', null);
+    combinations.propertyRanges.put('a', null);
+    combinations.propertyRanges.put('s', null);
     return combinations;
-  }
-
-  private static NonOverlappingRanges createEmptyRange() {
-    return new NonOverlappingRanges();
   }
 
   /**
@@ -73,8 +67,8 @@ public class Combinations {
   }
 
   private long getCountFor(Character property) {
-    NonOverlappingRanges ranges = propertyRanges.get(property);
-    return ranges.getTotalLength();
+    IntegerRange range = propertyRanges.get(property);
+    return range != null ? range.getLength() : 0;
   }
 
   /**
@@ -86,11 +80,9 @@ public class Combinations {
   public Combinations apply(Condition condition) {
     Combinations c = this.createCopy();
     if (condition != null) {
-      for (var entry : c.propertyRanges.entrySet()) {
-        char property = entry.getKey();
-        NonOverlappingRanges ranges = entry.getValue();
-        condition.applyTo(property, ranges);
-      }
+      char property = condition.property();
+      IntegerRange range = c.propertyRanges.get(property);
+      c.propertyRanges.put(property, condition.applyTo(range));
     }
     return c;
   }
@@ -115,10 +107,10 @@ public class Combinations {
    */
   public boolean hasSomeEmptyRanges() {
     boolean empty = false;
-    Iterator<NonOverlappingRanges> it = propertyRanges.values().iterator();
+    Iterator<IntegerRange> it = propertyRanges.values().iterator();
     while (!empty && it.hasNext()) {
-      NonOverlappingRanges ranges = it.next();
-      empty = ranges.isEmpty();
+      IntegerRange range = it.next();
+      empty = range == null;
     }
     return empty;
   }
@@ -129,15 +121,9 @@ public class Combinations {
    * @param c The combinations to add
    */
   public void add(Combinations c) {
-    for (var entry : propertyRanges.entrySet()) {
-      Character property = entry.getKey();
-      NonOverlappingRanges ranges = entry.getValue();
-      ranges.addAll(c.getRangesFor(property));
+    for (Character property : c.propertyRanges.keySet()) {
+      propertyRanges.put(property, c.propertyRanges.get(property).createCopy());
     }
-  }
-
-  private NonOverlappingRanges getRangesFor(Character property) {
-    return propertyRanges.get(property);
   }
 
   @Override
@@ -148,7 +134,7 @@ public class Combinations {
       char property = props.charAt(i);
       sb.append(property);
       sb.append(": ");
-      sb.append(getRangesFor(property));
+      sb.append(propertyRanges.get(property));
       sb.append(" ");
     }
     return sb.toString();

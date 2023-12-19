@@ -1,6 +1,6 @@
 package problem.day19;
 
-import tools.NonOverlappingRanges;
+import tools.IntegerRange;
 
 /**
  * A condition to check.
@@ -23,17 +23,20 @@ public record Condition(char property, Comparison comparison, int threshold) {
   /**
    * Apply the condition to allowed ranges of a given property.
    *
-   * @param prop   The property to filter
-   * @param ranges The ranges to constrain with this condition
+   * @param range The range to constrain with this condition
    */
-  public void applyTo(char prop, NonOverlappingRanges ranges) {
-    if (prop == property) {
-      if (comparison == Comparison.GREATER_THAN) {
-        ranges.removeAllLowerThan(threshold + 1);
-      } else {
-        ranges.removeAllGreaterThan(threshold - 1);
+  public IntegerRange applyTo(IntegerRange range) {
+    IntegerRange newRange = null;
+    if (comparison == Comparison.GREATER_THAN) {
+      if (range.getEnd() > threshold) {
+        long start = Math.max(threshold + 1, range.getStart());
+        newRange = new IntegerRange(start, range.getEnd());
       }
+    } else if (range.getStart() < threshold) {
+      long end = Math.min(threshold - 1, range.getEnd());
+      newRange = new IntegerRange(range.getStart(), end);
     }
+    return newRange;
   }
 
   /**
