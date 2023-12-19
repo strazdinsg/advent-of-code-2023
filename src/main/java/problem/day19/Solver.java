@@ -39,7 +39,9 @@ public class Solver {
         propertySum += part.getPropertySum();
       }
     }
-    Logger.info("Property sum: " + propertySum);
+    Logger.info("Property sum (Part 1): " + propertySum);
+
+    Logger.info("Accepted combinations: " + workflows.calculateAcceptedCombinationCount());
   }
 
 
