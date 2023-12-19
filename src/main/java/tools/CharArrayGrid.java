@@ -11,7 +11,15 @@ import java.util.List;
 public class CharArrayGrid extends CharacterGrid {
   private final List<CharArray> chars = new ArrayList<>();
 
-  public static CharArrayGrid create(int rows, int columns, char fill) {
+  /**
+   * Create a char array grid.
+   *
+   * @param rows    The number of rows
+   * @param columns The number of columns
+   * @param fill    The character to use for the fill.
+   * @return The grid with desired dimensions, filled with the specified character
+   */
+  public static CharArrayGrid createWithFill(int rows, int columns, char fill) {
     CharArrayGrid grid = new CharArrayGrid();
     String emptyRow = ("" + fill).repeat(columns);
     for (int row = 0; row < rows; ++row) {

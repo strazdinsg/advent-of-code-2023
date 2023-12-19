@@ -1,15 +1,18 @@
 package problem.day18;
 
-
-import tools.*;
 import java.util.LinkedList;
 import java.util.List;
+import tools.Direction;
+import tools.InputFile;
+import tools.Logger;
+import tools.Vector;
 
 /**
  * Solution for the problem of Day 18
  * See description here: https://adventofcode.com/2023/day/18
  */
 public class Solver {
+  private static final boolean PART2 = false;
   Vector cursor;
 
   /**
@@ -36,26 +39,15 @@ public class Solver {
     for (String line : lines) {
       edges.add(parseEdge(line));
     }
-    Rectangle boundaries = findBoundaries(edges);
-    Painting painting = new Painting(boundaries);
-    painting.paint(edges);
-    debugPrint(painting);
-    painting.findInteriorArea();
-    Logger.info("Total size: " + painting.getTotalSize());
-  }
-
-  private Rectangle findBoundaries(List<Edge> edges) {
-    Rectangle boundaries = new Rectangle(0, 0, 0, 0);
-    for (Edge edge : edges) {
-      boundaries = boundaries.extend(edge.end());
-    }
-    return boundaries;
+    Painting painting = new Painting();
+    painting.add(edges);
+    Logger.info("Total size: " + painting.findArea());
   }
 
   private Edge parseEdge(String line) {
     PaintCommand command = parseCommand(line);
     Vector endPosition = cursor.plus(command.toVector());
-    Edge edge = new Edge(cursor, endPosition, command.color());
+    Edge edge = new Edge(cursor, endPosition);
     cursor = endPosition;
     return edge;
   }
@@ -66,17 +58,30 @@ public class Solver {
       throw new IllegalArgumentException("Invalid line format: " + line);
     }
 
-    char dir = parts[0].charAt(0);
-    int distance = Integer.parseInt(parts[1]);
-    String color = parts[2].substring(2, 8);
-    return new PaintCommand(Direction.fromRelative(dir), distance, new Color(color));
+    Direction direction;
+    int distance;
+    if (PART2) {
+      direction = parseDirection(parts[2].charAt(7));
+      distance = parseDistance(parts[2].substring(2, 7));
+    } else {
+      direction = Direction.fromRelative(parts[0].charAt(0));
+      distance = Integer.parseInt(parts[1]);
+    }
+    return new PaintCommand(direction, distance);
   }
 
-  private void debugPrint(Painting painting) {
-    CharArrayGrid grid = painting.createDebugGrid();
-    OutputFile outputFile = new OutputFile("painting.out");
-    outputFile.writeGrid(grid);
-    outputFile.close();
+  private int parseDistance(String hexDistance) {
+    return Integer.parseInt(hexDistance, 16);
+  }
+
+  private Direction parseDirection(char d) {
+    return switch (d) {
+      case '0' -> Direction.EAST;
+      case '1' -> Direction.SOUTH;
+      case '2' -> Direction.WEST;
+      case '3' -> Direction.NORTH;
+      default -> throw new IllegalArgumentException("Invalid direction: " + d);
+    };
   }
 }
 

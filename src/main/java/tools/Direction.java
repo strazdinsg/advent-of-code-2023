@@ -6,6 +6,13 @@ package tools;
 public enum Direction {
   NORTH, WEST, SOUTH, EAST;
 
+  /**
+   * Create a direction from relative direction character.
+   *
+   * @param dir Direction characters: U, D, L or R
+   * @return The corresponding direction
+   * @throws IllegalArgumentException When the direction character is invalid
+   */
   public static Direction fromRelative(char dir) {
     return switch (dir) {
       case 'U' -> NORTH;

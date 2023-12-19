@@ -87,7 +87,7 @@ public class Rectangle {
    *
    * @return The width
    */
-  public int getWidth() {
+  public long getWidth() {
     return bottomRight.x() - topLeft.x() + 1;
   }
 
@@ -96,7 +96,7 @@ public class Rectangle {
    *
    * @return The height
    */
-  public int getHeight() {
+  public long getHeight() {
     return bottomRight.y() - topLeft.y() + 1;
   }
 
@@ -174,7 +174,7 @@ public class Rectangle {
   }
 
   /**
-   * Create another rectangle with the same dimensions and the top-left corner at (0, 0)
+   * Create another rectangle with the same dimensions and the top-left corner at (0, 0).
    *
    * @return The normalized rectangle
    */
