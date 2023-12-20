@@ -1,5 +1,8 @@
 package problem.day20;
 
+/**
+ * A radio module.
+ */
 public abstract class RadioModule {
   private final String name;
   protected final String[] recipientNames;

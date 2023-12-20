@@ -1,10 +1,12 @@
 package problem.day20;
 
-import static problem.day20.Modules.*;
+import static problem.day20.Modules.BROADCASTER;
+import static problem.day20.Modules.CONJUNCTION;
+import static problem.day20.Modules.FLIP_FLOP;
 
+import java.util.List;
 import tools.InputFile;
 import tools.Logger;
-import java.util.List;
 
 /**
  * Solution for the problem of Day 20
@@ -37,12 +39,8 @@ public class Solver {
     }
     modules.registerSenders();
 
-    boolean DO_PART_ONE = false;
-    if (DO_PART_ONE) {
-      part1(modules);
-    } else {
-      part2();
-    }
+    part1(modules);
+    // part2();
   }
 
   private void part2() {

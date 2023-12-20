@@ -4,6 +4,9 @@ import static problem.day20.Signal.HIGH;
 import static problem.day20.Signal.LOW;
 import static problem.day20.Signal.NONE;
 
+/**
+ * A flip-flop module which toggles its HIGH/LOW state and outputs it when it receives a LOW input.
+ */
 public class FlipFlopModule extends RadioModule {
   private boolean on = false;
   private boolean flipped = false;

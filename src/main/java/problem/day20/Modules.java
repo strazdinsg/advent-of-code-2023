@@ -1,13 +1,18 @@
 package problem.day20;
 
-import static problem.day20.Signal.*;
+import static problem.day20.Signal.HIGH;
+import static problem.day20.Signal.LOW;
+import static problem.day20.Signal.NONE;
 
-import tools.Logger;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
+import tools.Logger;
 
+/**
+ * A machine of modules.
+ */
 public class Modules {
   public static final String BROADCASTER = "broadcaster";
   public static final char FLIP_FLOP = '%';
@@ -26,6 +31,9 @@ public class Modules {
     modules.put(radioModule.getName(), radioModule);
   }
 
+  /**
+   * Simulate a button push with all the consequences.
+   */
   public void pushButton() {
     sendLowSignalFromButtonToBroadcaster();
 
@@ -83,6 +91,9 @@ public class Modules {
     return highSignalCount;
   }
 
+  /**
+   * Make sure all the inputs are correctly linked to each module.
+   */
   public void registerSenders() {
     for (RadioModule module : modules.values()) {
       String senderName = module.getName();
