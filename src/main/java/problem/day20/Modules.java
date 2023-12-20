@@ -1,17 +1,23 @@
 package problem.day20;
 
-import static problem.day20.EmittedSignal.*;
+import static problem.day20.Signal.*;
 
 import tools.Logger;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Queue;
 
 public class Modules {
-  public static final String BROADCASTER_NAME = "broadcaster";
+  public static final String BROADCASTER = "broadcaster";
   public static final char FLIP_FLOP = '%';
   public static final char CONJUNCTION = '&';
   private static final String OUTPUT = "output";
+  private static final String BUTTON = "BUTTON";
+  private static final String FINAL_MODULE_NAME = "rx";
   private final Map<String, RadioModule> modules = new HashMap<>();
-  private final Queue<RadioModule> toProcess = new ArrayDeque<>();
+  private final Queue<EmittedSignal> emittedSignals = new ArrayDeque<>();
+  private boolean finalModuleActivated = false;
 
   private long lowSignalCount = 0;
   private long highSignalCount = 0;
@@ -21,36 +27,47 @@ public class Modules {
   }
 
   public void pushButton() {
-    RadioModule broadcaster = modules.get(BROADCASTER_NAME);
-    if (broadcaster == null) {
-      throw new IllegalStateException("Broadcaster not found");
-    }
+    sendLowSignalFromButtonToBroadcaster();
 
-    broadcaster.receiveInput(broadcaster.getName(), LOW);
-    toProcess.clear();
-    toProcess.add(broadcaster);
+    while (!emittedSignals.isEmpty()) {
+      EmittedSignal signal = emittedSignals.poll();
+      RadioModule module = modules.get(signal.recipient());
+      if (module == null) {
+        if (signal.recipient().equals(FINAL_MODULE_NAME) && signal.signal() == LOW) {
+          Logger.info("Final module activated!");
+          finalModuleActivated = true;
+        }
+        continue;
+      }
 
-    while (!toProcess.isEmpty()) {
-      RadioModule module = toProcess.poll();
-      EmittedSignal output = module.process();
-      Logger.info(module.getName() + ": " + output);
+      module.receiveInput(signal.sender(), signal.signal());
+      Signal output = module.process();
+      // Logger.info(module.getName() + " - " + output + " -> " + module.getRecipientNameString());
       rememberSignalCount(output, module);
       if (output != NONE) {
-        // TODO - The signals must be queued!
-        propagateSignals(module, output);
+        enqueueSignals(module, output);
       }
     }
   }
 
-  private void propagateSignals(RadioModule module, EmittedSignal output) {
-    for (String recipientName : module.getRecipientNames()) {
-      RadioModule recipient = modules.get(recipientName);
-      recipient.receiveInput(module.getName(), output);
-      toProcess.add(recipient);
+  private void sendLowSignalFromButtonToBroadcaster() {
+    RadioModule broadcaster = modules.get(BROADCASTER);
+    if (broadcaster == null) {
+      throw new IllegalStateException("Broadcaster not found");
+    }
+    broadcaster.receiveInput(broadcaster.getName(), LOW);
+    emittedSignals.clear();
+    emittedSignals.add(new EmittedSignal(BUTTON, BROADCASTER, LOW));
+    ++lowSignalCount;
+  }
+
+  private void enqueueSignals(RadioModule sender, Signal output) {
+    for (String recipientName : sender.getRecipientNames()) {
+      emittedSignals.add(new EmittedSignal(sender.getName(), recipientName, output));
     }
   }
 
-  private void rememberSignalCount(EmittedSignal output, RadioModule module) {
+  private void rememberSignalCount(Signal output, RadioModule module) {
     if (output == HIGH) {
       highSignalCount += module.getOutputCount();
     } else if (output == LOW) {
@@ -72,12 +89,17 @@ public class Modules {
       for (String recipientName : module.getRecipientNames()) {
         if (!recipientName.equals(OUTPUT)) {
           RadioModule recipient = modules.get(recipientName);
-          if (recipient == null) {
-            throw new IllegalStateException("Invalid recipient module: " + recipientName);
+          if (recipient != null) {
+            recipient.registerInputModule(senderName);
+          } else {
+            Logger.error("Invalid recipient module: " + recipientName);
           }
-          recipient.registerInputModule(senderName);
         }
       }
     }
+  }
+
+  public boolean isFinalModuleActivated() {
+    return finalModuleActivated;
   }
 }

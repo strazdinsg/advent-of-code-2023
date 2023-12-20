@@ -1,22 +1,3 @@
-broadcaster -> a, b, c
-%a -> b
-%b -> c
-%c -> inv
-&inv -> a
-
-
-broadcaster -> a
-%a -> inv, con
-&inv -> b
-%b -> con
-&con -> output
-
-broadcaster -> a, b, c
-%a -> b
-%b -> c
-%c -> inv
-&inv -> a
-
 %db -> cq
 %rj -> gp, nd
 %ff -> bk
@@ -75,3 +56,17 @@ broadcaster -> sh, nm, ps, fs
 %rq -> gp, ff
 %sz -> cz, fz
 %dn -> cz
+
+broadcaster -> a
+%a -> inv, con
+&inv -> b
+%b -> con
+&con -> output
+
+broadcaster -> a, b, c
+%a -> b
+%b -> c
+%c -> inv
+&inv -> a
+
+

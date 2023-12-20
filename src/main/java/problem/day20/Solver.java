@@ -11,6 +11,7 @@ import java.util.List;
  * See description here: https://adventofcode.com/2023/day/2
  */
 public class Solver {
+  private final Modules modules = new Modules();
 
   /**
    * Run the solver - solve the puzzle.
@@ -31,12 +32,32 @@ public class Solver {
     }
 
     List<String> lines = inputFile.readLinesUntilEmptyLine();
-    Modules modules = new Modules();
     for (String line : lines) {
       modules.addModule(parseModule(line));
     }
     modules.registerSenders();
 
+    boolean DO_PART_ONE = false;
+    if (DO_PART_ONE) {
+      part1(modules);
+    } else {
+      part2();
+    }
+  }
+
+  private void part2() {
+    long buttonPresses = 0;
+    while (!modules.isFinalModuleActivated()) {
+      modules.pushButton();
+      buttonPresses++;
+      if (buttonPresses % 1000000 == 0) {
+        Logger.info(buttonPresses + " button presses, still working...");
+      }
+    }
+    Logger.info("Final module activated after " + buttonPresses + " button presses");
+  }
+
+  private static void part1(Modules modules) {
     for (int i = 0; i < 1000; ++i) {
       modules.pushButton();
     }
@@ -54,7 +75,7 @@ public class Solver {
     String typeAndName = parts[0];
     String[] receivers = parts[1].split(", ");
     RadioModule module;
-    if (typeAndName.equals(BROADCASTER_NAME)) {
+    if (typeAndName.equals(BROADCASTER)) {
       module = new BroadcasterModule(typeAndName, receivers);
     } else {
       char type = typeAndName.charAt(0);

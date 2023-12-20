@@ -17,7 +17,7 @@ public abstract class RadioModule {
   public void registerInputModule(String moduleName) {
   }
 
-  public abstract void receiveInput(String sender, EmittedSignal input);
+  public abstract void receiveInput(String sender, Signal input);
 
   public String getName() {
     return name;
@@ -28,7 +28,7 @@ public abstract class RadioModule {
    *
    * @return The emitted signal, if any
    */
-  public abstract EmittedSignal process();
+  public abstract Signal process();
 
   public String[] getRecipientNames() {
     return recipientNames;
@@ -36,5 +36,9 @@ public abstract class RadioModule {
 
   public long getOutputCount() {
     return recipientNames.length;
+  }
+
+  public String getRecipientNameString() {
+    return String.join(", ", recipientNames);
   }
 }

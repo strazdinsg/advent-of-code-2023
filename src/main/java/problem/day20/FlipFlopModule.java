@@ -1,8 +1,8 @@
 package problem.day20;
 
-import static problem.day20.EmittedSignal.HIGH;
-import static problem.day20.EmittedSignal.LOW;
-import static problem.day20.EmittedSignal.NONE;
+import static problem.day20.Signal.HIGH;
+import static problem.day20.Signal.LOW;
+import static problem.day20.Signal.NONE;
 
 public class FlipFlopModule extends RadioModule {
   private boolean on = false;
@@ -13,7 +13,7 @@ public class FlipFlopModule extends RadioModule {
   }
 
   @Override
-  public void receiveInput(String sender, EmittedSignal input) {
+  public void receiveInput(String sender, Signal input) {
     flipped = input == LOW;
     if (flipped) {
       on = !on;
@@ -21,8 +21,8 @@ public class FlipFlopModule extends RadioModule {
   }
 
   @Override
-  public EmittedSignal process() {
-    EmittedSignal output = flipped ? (on ? HIGH : LOW) : NONE;
+  public Signal process() {
+    Signal output = flipped ? (on ? HIGH : LOW) : NONE;
     flipped = false;
     return output;
   }

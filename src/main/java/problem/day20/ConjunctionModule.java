@@ -1,6 +1,6 @@
 package problem.day20;
 
-import static problem.day20.EmittedSignal.*;
+import static problem.day20.Signal.*;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,14 +18,14 @@ public class ConjunctionModule extends RadioModule {
   }
 
   @Override
-  public void receiveInput(String sender, EmittedSignal input) {
+  public void receiveInput(String sender, Signal input) {
     if (input != NONE) {
       inputs.put(sender, input == HIGH);
     }
   }
 
   @Override
-  public EmittedSignal process() {
+  public Signal process() {
     return areAllInputsHigh() ? LOW : HIGH;
   }
 
