@@ -24,6 +24,7 @@ public class Maze {
   private static final char FOREST = '#';
   private final CharArrayGrid grid;
   private final PathGraph graph = new PathGraph();
+  Set<Vector> visitedCells = new HashSet<>();
 
   private Vector start;
   private Vector end;
@@ -45,14 +46,7 @@ public class Maze {
       throw new IllegalStateException("End tile not found");
     }
 
-    markStartAndStopAsSlopes();
-
     buildPathTree();
-  }
-
-  private void markStartAndStopAsSlopes() {
-    grid.setCharacter(start.y(), start.x(), SLOPE_SOUTH);
-    grid.setCharacter(end.y(), end.x(), SLOPE_SOUTH);
   }
 
   private Vector findStart() {
@@ -77,16 +71,18 @@ public class Maze {
 
   private void buildPathTree() {
     Queue<Vector> toVisit = new ArrayDeque<>();
-    Set<Vector> visited = new HashSet<>();
+    Set<Vector> visitedJunctions = new HashSet<>();
     toVisit.add(start);
     while (!toVisit.isEmpty()) {
       Vector junction = toVisit.poll();
-      visited.add(junction);
-      Set<Edge> edges = findReachableJunctions(junction);
-      graph.addAll(edges);
-      for (Edge edge : edges) {
-        if (!visited.contains(edge.to()) && !edge.to().equals(end)) {
-          toVisit.add(edge.to());
+      if (!visitedJunctions.contains(junction)) {
+        visitedJunctions.add(junction);
+        Set<Edge> edges = findReachableJunctions(junction);
+        graph.addAll(edges);
+        for (Edge edge : edges) {
+          if (!visitedJunctions.contains(edge.to()) && !edge.to().equals(end)) {
+            toVisit.add(edge.to());
+          }
         }
       }
     }
@@ -96,17 +92,21 @@ public class Maze {
     Logger.info("Junctions from " + from + ":");
     Set<Edge> edges = new HashSet<>();
     Queue<PathCell> toVisit = new ArrayDeque<>();
-    Set<Vector> visited = new HashSet<>();
     toVisit.add(new PathCell(from, 0));
     while (!toVisit.isEmpty()) {
       PathCell cell = toVisit.poll();
-      visited.add(cell.position());
+//      Logger.info("  " + cell);
+      visitedCells.add(cell.position());
       Set<PathCell> reachableCells = getReachableFrom(cell);
       for (PathCell reachable : reachableCells) {
-        if (!visited.contains(reachable.position())) {
+        if (!visitedCells.contains(reachable.position())) {
           if (isJunction(reachable)) {
-            Logger.info("  ==> " + reachable);
+            Logger.info("    ==> " + reachable);
             edges.add(new Edge(from, reachable.position(), reachable.steps()));
+            if (canClimb) {
+              // Can walk in the opposite direction as well
+              edges.add(new Edge(reachable.position(), from, reachable.steps()));
+            }
           } else {
             toVisit.add(reachable);
           }
@@ -137,7 +137,7 @@ public class Maze {
       case SOUTH -> SLOPE_SOUTH;
       case EAST -> SLOPE_EAST;
     };
-    return cell == EMPTY || (cell == allowedSlope || canClimb);
+    return cell == EMPTY || cell == allowedSlope || (canClimb && cell != FOREST);
   }
 
   private boolean isJunction(PathCell cell) {

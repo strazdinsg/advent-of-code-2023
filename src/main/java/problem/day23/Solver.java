@@ -30,9 +30,17 @@ public class Solver {
     }
 
     CharArrayGrid grid = inputFile.readAllIntoCharGrid();
-    Maze maze = new Maze(grid, false);
-    maze.findPaths();
-    Logger.info("Longest path: " + maze.getLongestPath());
+    Maze mazePart1 = new Maze(grid, false);
+    mazePart1.findPaths();
+
+    Maze mazePart2 = new Maze(grid, true);
+    mazePart2.findPaths();
+
+    long longestPath1 = mazePart1.getLongestPath();
+    long longestPath2 = mazePart2.getLongestPath();
+    Logger.info("Longest path for Part 1: " + longestPath1);
+    Logger.info("Longest path for Part 2: " + longestPath2);
+
   }
 
 }
