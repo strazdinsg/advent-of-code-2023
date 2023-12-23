@@ -1,10 +1,19 @@
 package problem.day23;
 
+import static tools.Direction.EAST;
+import static tools.Direction.NORTH;
+import static tools.Direction.SOUTH;
+import static tools.Direction.WEST;
+
 import tools.CharArrayGrid;
 import tools.Direction;
 import tools.Logger;
 import tools.Vector;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Queue;
+import java.util.Set;
 
 public class Maze {
   private static final char EMPTY = '.';
@@ -12,6 +21,7 @@ public class Maze {
   private static final char SLOPE_EAST = '>';
   private static final char SLOPE_WEST = '<';
   private static final char SLOPE_SOUTH = 'v';
+  private static final char FOREST = '#';
   private final CharArrayGrid grid;
   private final PathGraph graph = new PathGraph();
 
@@ -70,11 +80,11 @@ public class Maze {
     Set<Vector> visited = new HashSet<>();
     toVisit.add(start);
     while (!toVisit.isEmpty()) {
-      Vector slope = toVisit.poll();
-      visited.add(slope);
-      Set<Edge> reachableEdges = findReachableSlopes(slope);
-      graph.addAll(reachableEdges);
-      for (Edge edge : reachableEdges) {
+      Vector junction = toVisit.poll();
+      visited.add(junction);
+      Set<Edge> edges = findReachableJunctions(junction);
+      graph.addAll(edges);
+      for (Edge edge : edges) {
         if (!visited.contains(edge.to()) && !edge.to().equals(end)) {
           toVisit.add(edge.to());
         }
@@ -82,21 +92,19 @@ public class Maze {
     }
   }
 
-  private Set<Edge> findReachableSlopes(Vector from) {
-    Logger.info("Slopes from " + from + ":");
+  private Set<Edge> findReachableJunctions(Vector from) {
+    Logger.info("Junctions from " + from + ":");
     Set<Edge> edges = new HashSet<>();
     Queue<PathCell> toVisit = new ArrayDeque<>();
     Set<Vector> visited = new HashSet<>();
-    PathCell firstCell = getNextForSlope(from);
-    toVisit.add(firstCell);
+    toVisit.add(new PathCell(from, 0));
     while (!toVisit.isEmpty()) {
       PathCell cell = toVisit.poll();
       visited.add(cell.position());
-//      Logger.info("  visit " + cell);
       Set<PathCell> reachableCells = getReachableFrom(cell);
       for (PathCell reachable : reachableCells) {
         if (!visited.contains(reachable.position())) {
-          if (isSlope(reachable)) {
+          if (isJunction(reachable)) {
             Logger.info("  ==> " + reachable);
             edges.add(new Edge(from, reachable.position(), reachable.steps()));
           } else {
@@ -106,29 +114,6 @@ public class Maze {
       }
     }
     return edges;
-  }
-
-  private PathCell getNextForSlope(Vector slope) {
-    PathCell nextCell = null;
-
-    int row = switch (grid.getCharacter(slope)) {
-      case SLOPE_EAST, SLOPE_WEST -> slope.y();
-      case SLOPE_NORTH -> slope.y() - 1;
-      case SLOPE_SOUTH -> slope.y() + 1;
-      default -> throw new IllegalArgumentException("Invalid slope character at " + slope);
-    };
-    int column = switch (grid.getCharacter(slope)) {
-      case SLOPE_NORTH, SLOPE_SOUTH -> slope.x();
-      case SLOPE_EAST -> slope.x() + 1;
-      case SLOPE_WEST -> slope.x() - 1;
-      default -> throw new IllegalArgumentException("Invalid slope character at " + slope);
-    };
-
-    if (grid.isWithin(row, column) && grid.getCharacter(row, column) == EMPTY) {
-      nextCell = new PathCell(new Vector(column, row), 1);
-    }
-
-    return nextCell;
   }
 
   private Set<PathCell> getReachableFrom(PathCell cell) {
@@ -147,19 +132,25 @@ public class Maze {
 
   private boolean isPassable(char cell, Direction direction) {
     char allowedSlope = switch (direction) {
-      case NORTH -> '^';
-      case WEST -> '<';
-      case SOUTH -> 'v';
-      case EAST -> '>';
+      case NORTH -> SLOPE_NORTH;
+      case WEST -> SLOPE_WEST;
+      case SOUTH -> SLOPE_SOUTH;
+      case EAST -> SLOPE_EAST;
     };
-    return cell == EMPTY || cell == allowedSlope;
+    return cell == EMPTY || (cell == allowedSlope || canClimb);
   }
 
-  private boolean isSlope(PathCell cell) {
-    char c = grid.getCharacter(cell.position());
-    return c == SLOPE_NORTH || c == SLOPE_EAST || c == SLOPE_SOUTH || c == SLOPE_WEST;
+  private boolean isJunction(PathCell cell) {
+    return isWalkable(cell.position().step(NORTH))
+        + isWalkable(cell.position().step(EAST))
+        + isWalkable(cell.position().step(SOUTH))
+        + isWalkable(cell.position().step(WEST))
+        > 2 || cell.position().equals(end);
   }
 
+  private int isWalkable(Vector position) {
+    return grid.isWithin(position) && grid.getCharacter(position) != FOREST ? 1 : 0;
+  }
 
   public long getLongestPath() {
     return graph.getLongestPathLength(start, end);
