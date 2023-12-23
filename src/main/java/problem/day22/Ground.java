@@ -60,6 +60,10 @@ public class Ground {
     return brick.dropOnTopOf(supportingBricks);
   }
 
+  private Brick getSupportAt(Vector cube) {
+    return null; // TODO
+  }
+
   public int getRemovableBrickCount() {
     Set<Brick> removable = new HashSet<>();
     removable.addAll(getNonUniqueSupportBricks());

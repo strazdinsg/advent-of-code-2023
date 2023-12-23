@@ -24,7 +24,7 @@ public class Solver {
   }
 
   private void solve() {
-    InputFile inputFile = new InputFile("problem21.input");
+    InputFile inputFile = new InputFile("problem22.input");
     if (!inputFile.exists()) {
       Logger.error("Input file not found");
       return;
@@ -54,9 +54,9 @@ public class Solver {
       throw new IllegalArgumentException("Invalid line part format: " + s);
     }
     return new Vector3(
-        Long.parseLong(parts[0]),
-        Long.parseLong(parts[1]),
-        Long.parseLong(parts[2])
+        Integer.parseInt(parts[0]),
+        Integer.parseInt(parts[1]),
+        Integer.parseInt(parts[2])
     );
   }
 

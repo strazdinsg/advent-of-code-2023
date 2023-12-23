@@ -42,4 +42,8 @@ public class Brick implements Comparable<Brick> {
     Vector end = top.z() == bottom.z() ? new Vector(top.x(), top.y()) : start;
     return new HorizontalArea(start, end);
   }
+
+  public Brick dropOnTopOf(Set<Brick> supportingBricks) {
+    return null; // TODO
+  }
 }
