@@ -1,6 +1,7 @@
 package problem.day22;
 
 import tools.Vector;
+import tools.Vector3;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -38,8 +39,8 @@ public class Brick implements Comparable<Brick> {
   }
 
   public HorizontalArea getBottomArea() {
-    Vector start = new Vector(bottom.x(), bottom.y());
-    Vector end = top.z() == bottom.z() ? new Vector(top.x(), top.y()) : start;
+    Vector start = new Vector((int) bottom.x(), (int) bottom.y());
+    Vector end = top.z() == bottom.z() ? new Vector((int)top.x(), (int)top.y()) : start;
     return new HorizontalArea(start, end);
   }
 

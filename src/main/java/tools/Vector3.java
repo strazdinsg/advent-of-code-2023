@@ -1,8 +1,8 @@
-package problem.day22;
+package tools;
 
 import java.util.Objects;
 
-public record Vector3(int x, int y, int z) implements Comparable<Vector3> {
+public record Vector3(long x, long y, long z) implements Comparable<Vector3> {
 
   @Override
   public boolean equals(Object o) {
@@ -19,12 +19,12 @@ public record Vector3(int x, int y, int z) implements Comparable<Vector3> {
 
   @Override
   public int compareTo(Vector3 o) {
-    int comparison = Integer.compare(this.z, o.z);
+    int comparison = Long.compare(this.z, o.z);
     if (comparison == 0) {
-      comparison = Integer.compare(this.x, o.x);
+      comparison = Long.compare(this.x, o.x);
     }
     if (comparison == 0) {
-      comparison = Integer.compare(this.y, o.y);
+      comparison = Long.compare(this.y, o.y);
     }
     return comparison;
   }

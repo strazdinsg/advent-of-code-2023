@@ -40,10 +40,10 @@ public class Ground {
     Set<Brick> supportingBricks = new HashSet<>();
     HorizontalArea area = brick.getBottomArea();
     Vector cube = area.start();
-    int landedHeight = brick.bottom.z();
+    long landedHeight = brick.bottom.z();
     do {
       Brick supportOfCell = getSupportAt(cube);
-      int height = supportOfCell.top.z();
+      long height = supportOfCell.top.z();
       if (height > brick.bottom.z()) {
         throw new IllegalStateException("Brick " + brick + " intercepted by " + supportOfCell);
       }
