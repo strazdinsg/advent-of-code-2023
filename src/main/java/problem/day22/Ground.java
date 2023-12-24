@@ -1,13 +1,16 @@
 package problem.day22;
 
-import tools.Vector;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.Stack;
+import tools.Vector;
 
+/**
+ * A flat ground where the stacks of bricks can be located.
+ */
 public class Ground {
 
   private static final int WIDTH = 10;
@@ -16,6 +19,9 @@ public class Ground {
   private Stack<Brick>[][] stacks;
   private List<Brick> landedBricks = new LinkedList<>();
 
+  /**
+   * Create the ground.
+   */
   public Ground() {
     this.stacks = new Stack[WIDTH][BREADTH];
     for (int i = 0; i < WIDTH; ++i) {
@@ -29,6 +35,9 @@ public class Ground {
     bricksInAir.add(brick);
   }
 
+  /**
+   * Let all the bricks fall until they land.
+   */
   public void letBricksFall() {
     while (!bricksInAir.isEmpty()) {
       Brick brick = bricksInAir.poll();
@@ -64,6 +73,11 @@ public class Ground {
     return null; // TODO
   }
 
+  /**
+   * Get the number of bricks which can be removed without causing other bricks to fail.
+   *
+   * @return The number of removable bicks
+   */
   public int getRemovableBrickCount() {
     Set<Brick> removable = new HashSet<>();
     removable.addAll(getNonUniqueSupportBricks());

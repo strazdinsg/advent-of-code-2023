@@ -1,11 +1,11 @@
 package problem.day24;
 
+import java.util.ArrayList;
+import java.util.List;
 import tools.InputFile;
 import tools.Logger;
 import tools.Vector3;
 import tools.VectorF;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Solution for the problem of Day 24
@@ -48,7 +48,8 @@ public class Solver {
             Logger.info("Lines " + i + " and " + j + " intersect at " + intersection);
             intersections++;
           } else {
-            Logger.info("Out of bounds: lines " + i + " and " + j + " intersect at " + intersection);
+            Logger.info("Out of bounds: lines " + i + " and " + j + " intersect at "
+                + intersection);
           }
         }
       }

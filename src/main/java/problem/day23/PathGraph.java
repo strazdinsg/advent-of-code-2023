@@ -1,12 +1,14 @@
 package problem.day23;
 
-import tools.Logger;
-import tools.Vector;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import tools.Vector;
 
+/**
+ * A graph representing a path, for Day 23.
+ */
 public class PathGraph {
   private final Map<Vector, Set<Edge>> edges = new HashMap<>();
   private final Set<Vector> visited = new HashSet<>();
@@ -20,6 +22,13 @@ public class PathGraph {
     edges.forEach(this::add);
   }
 
+  /**
+   * Find the longest path, a recursive function.
+   *
+   * @param from The start of the path
+   * @param end  The destination of the path
+   * @return The number of steps along the longest path possible from start to end
+   */
   public long findLongestPath(Vector from, Vector end) {
     if (from.equals(end)) {
       return 0;

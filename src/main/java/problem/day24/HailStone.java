@@ -14,6 +14,13 @@ import tools.VectorF;
  * @param speed The speed vector of the hailstone
  */
 public record HailStone(double a, double b, Vector3 start, Vector3 speed) {
+  /**
+   * Create a new hailstone.
+   *
+   * @param start The start position at time 0
+   * @param speed The speed vector of the hailstone
+   * @return The hailstone with the given parameters.
+   */
   public static HailStone create(Vector3 start, Vector3 speed) {
     double a = (double) speed.y() / (double) speed.x();
     double b = (double) start.y() - a * (double) start.x();

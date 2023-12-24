@@ -5,16 +5,19 @@ import static tools.Direction.NORTH;
 import static tools.Direction.SOUTH;
 import static tools.Direction.WEST;
 
-import tools.CharArrayGrid;
-import tools.Direction;
-import tools.Logger;
-import tools.Vector;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Queue;
 import java.util.Set;
+import tools.CharArrayGrid;
+import tools.Direction;
+import tools.Logger;
+import tools.Vector;
 
+/**
+ * A maze for Day 23.
+ */
 public class Maze {
   private static final char EMPTY = '.';
   private static final char SLOPE_NORTH = '^';
@@ -36,6 +39,9 @@ public class Maze {
     this.canClimb = canClimb;
   }
 
+  /**
+   * Find all the possible paths within the maze.
+   */
   public void findPaths() {
     start = findStart();
     if (start == null) {
@@ -95,7 +101,6 @@ public class Maze {
     toVisit.add(new PathCell(from, 0));
     while (!toVisit.isEmpty()) {
       PathCell cell = toVisit.poll();
-//      Logger.info("  " + cell);
       visitedCells.add(cell.position());
       Set<PathCell> reachableCells = getReachableFrom(cell);
       for (PathCell reachable : reachableCells) {

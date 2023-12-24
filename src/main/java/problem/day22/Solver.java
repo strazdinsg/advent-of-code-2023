@@ -1,9 +1,9 @@
 package problem.day22;
 
+import java.util.List;
 import tools.InputFile;
 import tools.Logger;
 import tools.Vector3;
-import java.util.List;
 
 /**
  * Solution for the problem of Day 22

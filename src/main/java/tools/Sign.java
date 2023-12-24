@@ -1,5 +1,8 @@
 package tools;
 
+/**
+ * A sign: positive or negative.
+ */
 public enum Sign {
   POSITIVE, NEGATIVE;
 
