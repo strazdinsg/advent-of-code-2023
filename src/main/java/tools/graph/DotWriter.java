@@ -22,7 +22,7 @@ public class DotWriter {
    * @param graph    The graph to write to the file
    * @param filePath The path to the file where to write the output
    */
-  public static void write(Graph graph, String filePath) {
+  public static void write(BidirectionalGraph graph, String filePath) {
     OutputFile file = new OutputFile(filePath);
     String graphType = graph.isBidirectional() ? "graph" : "digraph";
     file.writeLine(graphType + " g {");
@@ -33,16 +33,16 @@ public class DotWriter {
     file.close();
   }
 
-  private static void writeEdgesToVertex(OutputFile file, Graph graph, String vertex) {
-    Set<Edge> edges = graph.getConnectionsFor(vertex);
-    if (edges != null && !edges.isEmpty()) {
+  private static void writeEdgesToVertex(OutputFile file, BidirectionalGraph graph, String vertex) {
+    Set<String> connections = graph.getConnectionsFor(vertex);
+    if (connections != null && !connections.isEmpty()) {
       if (graph.isBidirectional()) {
-        edges = filterConnections(edges, vertex);
+        connections = filterConnections(connections, vertex);
       }
-      String connection = graph.isBidirectional() ? "--" : "->";
-      for (Edge edge : edges) {
-        String weight = edge.weight() != 1 ? (" [weight=" + edge.weight() + "]") : "";
-        file.writeLine("  " + vertex + " " + connection + " " + edge.v() + weight);
+      if (!connections.isEmpty()) {
+        String connectedVertices = String.join(" ", connections);
+        String connection = graph.isBidirectional() ? " -- " : " -> ";
+        file.writeLine("  " + vertex + connection + "{" + connectedVertices + "}");
       }
     }
   }
@@ -56,8 +56,8 @@ public class DotWriter {
    * @param vertex      The name of the vertex
    * @return The connected vertices having name > vertex
    */
-  private static Set<Edge> filterConnections(Set<Edge> connections, String vertex) {
-    return connections.stream().filter(c -> c.v().compareTo(vertex) > 0)
+  private static Set<String> filterConnections(Set<String> connections, String vertex) {
+    return connections.stream().filter(c -> c.compareTo(vertex) > 0)
         .collect(Collectors.toSet());
   }
 }
