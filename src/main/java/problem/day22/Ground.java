@@ -47,62 +47,65 @@ public class Ground {
 
   private Brick land(Brick brick) {
     Set<Brick> supportingBricks = new HashSet<>();
-    HorizontalArea area = brick.getBottomArea();
+    HorizontalOneDimensionalBrick area = brick.getBottomArea();
     Vector cube = area.start();
-    long landedHeight = brick.bottom.z();
+    long landedHeight = 0;
     do {
-      Brick supportOfCell = getSupportAt(cube);
-      long height = supportOfCell.top.z();
-      if (height > brick.bottom.z()) {
-        throw new IllegalStateException("Brick " + brick + " intercepted by " + supportOfCell);
+      Brick supportingBrick = getSupportAt(cube);
+      long supportHeight = supportingBrick != null ? supportingBrick.top.z() : 0;
+      if (supportHeight >= brick.bottom.z()) {
+        throw new IllegalStateException("Brick " + brick + " intercepted by " + supportingBrick);
       }
-      if (height == landedHeight) {
+      if (supportHeight == landedHeight) {
         // This is one of several supports
-      } else if (height > landedHeight) {
-        // New supporting brick found
+        if (supportingBrick != null) {
+          supportingBricks.add(supportingBrick);
+        }
+      } else if (supportHeight > landedHeight) {
+        // New supporting brick found, all previous supports are not valid anymore
         supportingBricks.clear();
-        supportingBricks.add(supportOfCell);
-        landedHeight = height;
+        supportingBricks.add(supportingBrick);
+        landedHeight = supportHeight;
       }
       cube = area.moveTowardsEnd(cube);
-    } while (cube != area.end());
-    return brick.dropOnTopOf(supportingBricks);
+    } while (area.isInside(cube));
+    Brick landedBrick = brick.dropOnTopOf(supportingBricks, landedHeight);
+    addToStacks(landedBrick);
+    return landedBrick;
   }
 
-  private Brick getSupportAt(Vector cube) {
-    return null; // TODO
+  private Brick getSupportAt(Vector position) {
+    Stack<Brick> stack = stacks[position.y()][position.x()];
+    return !stack.isEmpty() ? stack.peek() : null;
+  }
+
+  private void addToStacks(Brick landedBrick) {
+    HorizontalOneDimensionalBrick area = landedBrick.getBottomArea();
+    Vector cube = area.start();
+    while (area.isInside(cube)) {
+      addToStack(cube, landedBrick);
+      cube = area.moveTowardsEnd(cube);
+    }
+  }
+
+  private void addToStack(Vector position, Brick brick) {
+    Stack<Brick> stack = stacks[position.y()][position.x()];
+    stack.push(brick);
   }
 
   /**
    * Get the number of bricks which can be removed without causing other bricks to fail.
    *
-   * @return The number of removable bicks
+   * @return The number of removable bricks
    */
   public int getRemovableBrickCount() {
-    Set<Brick> removable = new HashSet<>();
-    removable.addAll(getNonUniqueSupportBricks());
-    removable.addAll(getFreeStandingBricks());
+    Set<Brick> removable = new HashSet<>(landedBricks);
+    for (Brick brick : landedBricks) {
+      Brick singleSupport = brick.getSingleSupport();
+      if (singleSupport != null) {
+        removable.remove(singleSupport);
+      }
+    }
     return removable.size();
-  }
-
-  private Set<Brick> getNonUniqueSupportBricks() {
-    Set<Brick> removableSupports = new HashSet<>();
-    for (Brick brick : landedBricks) {
-      Set<Brick> supporting = brick.getSupportedBy();
-      if (supporting.size() > 1) {
-        removableSupports.addAll(supporting);
-      }
-    }
-    return removableSupports;
-  }
-
-  private Set<Brick> getFreeStandingBricks() {
-    Set<Brick> freeStanding = new HashSet<>();
-    for (Brick brick : landedBricks) {
-      if (brick.isFreeStanding()) {
-        freeStanding.add(brick);
-      }
-    }
-    return freeStanding;
   }
 }

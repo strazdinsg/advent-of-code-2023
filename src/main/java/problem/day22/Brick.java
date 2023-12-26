@@ -12,7 +12,6 @@ public class Brick implements Comparable<Brick> {
   Vector3 top;
   Vector3 bottom;
   private final Set<Brick> supportedBy = new HashSet<>();
-  private final Set<Brick> supports = new HashSet<>();
 
   /**
    * Create a brick.
@@ -39,32 +38,39 @@ public class Brick implements Comparable<Brick> {
     return comparison;
   }
 
-  public Set<Brick> getSupportedBy() {
-    return supportedBy;
-  }
-
-  public boolean isFreeStanding() {
-    return supports.isEmpty();
-  }
-
   /**
    * Get the bottom area of the brick.
    *
    * @return The bottom area of the brick
    */
-  public HorizontalArea getBottomArea() {
+  public HorizontalOneDimensionalBrick getBottomArea() {
     Vector start = new Vector((int) bottom.x(), (int) bottom.y());
     Vector end = top.z() == bottom.z() ? new Vector((int) top.x(), (int) top.y()) : start;
-    return new HorizontalArea(start, end);
+    return HorizontalOneDimensionalBrick.create(start, end);
   }
 
   /**
    * Drop this brick until it lands on top of the supporting bricks (on the highest among them).
    *
    * @param supportingBricks The supporting blocks below this brick.
+   * @param landedHeight     The height at which the brick has landed (z-position of the bottom)
    * @return A new brick object representing the location of this brick when it has landed
    */
-  public Brick dropOnTopOf(Set<Brick> supportingBricks) {
-    return null; // TODO
+  public Brick dropOnTopOf(Set<Brick> supportingBricks, long landedHeight) {
+    Vector3 drop = new Vector3(0, 0, bottom.z() - landedHeight - 1);
+    Vector3 newBottom = bottom.minus(drop);
+    Vector3 newTop = top.minus(drop);
+    Brick droppedBrick = new Brick(newTop, newBottom);
+    droppedBrick.supportedBy.addAll(supportingBricks);
+    return droppedBrick;
+  }
+
+  @Override
+  public String toString() {
+    return bottom + " - " + top;
+  }
+
+  public Brick getSingleSupport() {
+    return supportedBy.size() == 1 ? supportedBy.iterator().next() : null;
   }
 }
