@@ -105,7 +105,7 @@ public class NonOverlappingRanges {
    *
    * @param v The value to remove
    */
-  public void removeSingleValue(int v) {
+  public void removeSingleValue(long v) {
     boolean found = false;
     Iterator<IntegerRange> it = ranges.iterator();
     while (it.hasNext() && !found) {
@@ -228,7 +228,7 @@ public class NonOverlappingRanges {
    *
    * @param n The threshold
    */
-  public void removeAllLowerThan(int n) {
+  public void removeAllLowerThan(long n) {
     removeTotallyCovered(new IntegerRange(Long.MIN_VALUE, n - 1));
     IntegerRange partlyCoveringRange = findStartRangeFor(new IntegerRange(n - 1, Long.MAX_VALUE));
     if (partlyCoveringRange != null) {
@@ -241,7 +241,7 @@ public class NonOverlappingRanges {
    *
    * @param n The threshold
    */
-  public void removeAllGreaterThan(int n) {
+  public void removeAllGreaterThan(long n) {
     removeTotallyCovered(new IntegerRange(n + 1, Long.MAX_VALUE));
     IntegerRange partlyCoveringRange = findEndRangeFor(new IntegerRange(Long.MIN_VALUE, n - 1));
     if (partlyCoveringRange != null) {

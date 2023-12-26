@@ -33,7 +33,7 @@ public class Platform {
     return load;
   }
 
-  private long getLoadFor(Vector position) {
+  private int getLoadFor(Vector position) {
     return grid.getRowCount() - position.y();
   }
 

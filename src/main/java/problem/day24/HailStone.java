@@ -23,7 +23,7 @@ public record HailStone(double a, double b, Vector3 start, Vector3 speed) {
    */
   public static HailStone create(Vector3 start, Vector3 speed) {
     double a = (double) speed.y() / (double) speed.x();
-    double b = (double) start.y() - a * (double) start.x();
+    double b = start.y() - a * start.x();
     return new HailStone(a, b, start, speed);
   }
 

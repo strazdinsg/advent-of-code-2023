@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import tools.IntegerRange;
-import tools.NonOverlappingRanges;
 
 /**
  * Keep a list of allowed combinations for all the xmas properties.

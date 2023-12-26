@@ -1,8 +1,8 @@
 package problem.day20;
 
-import static problem.day20.Modules.BROADCASTER;
-import static problem.day20.Modules.CONJUNCTION;
-import static problem.day20.Modules.FLIP_FLOP;
+import static problem.day20.ModuleMachine.BROADCASTER;
+import static problem.day20.ModuleMachine.CONJUNCTION;
+import static problem.day20.ModuleMachine.FLIP_FLOP;
 
 import java.util.List;
 import tools.InputFile;
@@ -13,7 +13,7 @@ import tools.Logger;
  * See description here: https://adventofcode.com/2023/day/2
  */
 public class Solver {
-  private final Modules modules = new Modules();
+  private final ModuleMachine moduleMachine = new ModuleMachine();
 
   /**
    * Run the solver - solve the puzzle.
@@ -35,18 +35,18 @@ public class Solver {
 
     List<String> lines = inputFile.readLinesUntilEmptyLine();
     for (String line : lines) {
-      modules.addModule(parseModule(line));
+      moduleMachine.addModule(parseModule(line));
     }
-    modules.registerSenders();
+    moduleMachine.registerSenders();
 
-    part1(modules);
+    part1(moduleMachine);
     // part2();
   }
 
   private void part2() {
     long buttonPresses = 0;
-    while (!modules.isFinalModuleActivated()) {
-      modules.pushButton();
+    while (!moduleMachine.isFinalModuleActivated()) {
+      moduleMachine.pushButton();
       buttonPresses++;
       if (buttonPresses % 1000000 == 0) {
         Logger.info(buttonPresses + " button presses, still working...");
@@ -55,12 +55,12 @@ public class Solver {
     Logger.info("Final module activated after " + buttonPresses + " button presses");
   }
 
-  private static void part1(Modules modules) {
+  private static void part1(ModuleMachine moduleMachine) {
     for (int i = 0; i < 1000; ++i) {
-      modules.pushButton();
+      moduleMachine.pushButton();
     }
-    long lowSignals = modules.getLowSignalCount();
-    long highSignals = modules.getHighSignalCount();
+    long lowSignals = moduleMachine.getLowSignalCount();
+    long highSignals = moduleMachine.getHighSignalCount();
     Logger.info("Signal multiplication: " + lowSignals * highSignals);
   }
 

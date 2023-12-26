@@ -12,6 +12,13 @@ import tools.Vector;
  * @param step  The step to take when moving from start to end
  */
 public record HorizontalOneDimensionalBrick(Vector start, Vector end, Vector step) {
+  /**
+   * Create a horizontal, one-dimensional brick.
+   *
+   * @param v1 Position of one end of the brick
+   * @param v2 Position of the other end of the brick
+   * @return A brick, where the start and end will be v1 and v2, so that the start is <= end
+   */
   public static HorizontalOneDimensionalBrick create(Vector v1, Vector v2) {
     Vector start;
     Vector end;
@@ -26,6 +33,12 @@ public record HorizontalOneDimensionalBrick(Vector start, Vector end, Vector ste
     return new HorizontalOneDimensionalBrick(start, end, step);
   }
 
+  /**
+   * Move the cube towards the end of the brick.
+   *
+   * @param cube The cube to move
+   * @return A new cube (position), which can be outside of this brick!
+   */
   public Vector moveTowardsEnd(Vector cube) {
     return cube.plus(step);
   }
@@ -35,6 +48,12 @@ public record HorizontalOneDimensionalBrick(Vector start, Vector end, Vector ste
     return start + " - " + end;
   }
 
+  /**
+   * Check whether the given cube is inside this brick.
+   *
+   * @param cube The cube to check
+   * @return True when cube is inside this brick, false otherwise
+   */
   public boolean isInside(Vector cube) {
     return cube.x() >= start.x() && cube.x() <= end.x()
         && cube.y() >= start.y() && cube.y() <= end.y();

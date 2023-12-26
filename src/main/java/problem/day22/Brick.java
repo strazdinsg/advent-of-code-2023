@@ -1,6 +1,7 @@
 package problem.day22;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import tools.Vector;
 import tools.Vector3;
@@ -36,6 +37,19 @@ public class Brick implements Comparable<Brick> {
       comparison = this.top.compareTo(o.top);
     }
     return comparison;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Brick brick = (Brick) o;
+    return compareTo(brick) == 0;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(top, bottom, supportedBy);
   }
 
   /**

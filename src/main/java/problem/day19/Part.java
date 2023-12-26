@@ -9,7 +9,7 @@ package problem.day19;
  * @param s The s-property of the part
  */
 public record Part(int x, int m, int a, int s) {
-  public long getPropertySum() {
+  public int getPropertySum() {
     return x + m + a + s;
   }
 

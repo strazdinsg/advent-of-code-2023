@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-public class NoOverlappingRangesTest {
+class NoOverlappingRangesTest {
   @Test
   void testMergingTwo() {
     NonOverlappingRanges ranges = new NonOverlappingRanges();

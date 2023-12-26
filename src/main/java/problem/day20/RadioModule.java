@@ -7,7 +7,7 @@ public abstract class RadioModule {
   private final String name;
   protected final String[] recipientNames;
 
-  public RadioModule(String name, String[] recipientNames) {
+  protected RadioModule(String name, String[] recipientNames) {
     this.name = name;
     this.recipientNames = recipientNames;
   }
