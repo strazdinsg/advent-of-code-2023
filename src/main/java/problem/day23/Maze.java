@@ -106,12 +106,7 @@ public class Maze {
       for (PathCell reachable : reachableCells) {
         if (!visitedCells.contains(reachable.position())) {
           if (isJunction(reachable)) {
-            Logger.info("    ==> " + reachable);
-            edges.add(new Edge(from, reachable.position(), reachable.steps()));
-            if (canClimb) {
-              // Can walk in the opposite direction as well
-              edges.add(new Edge(reachable.position(), from, reachable.steps()));
-            }
+            addEdges(from, reachable, edges);
           } else {
             toVisit.add(reachable);
           }
@@ -119,6 +114,15 @@ public class Maze {
       }
     }
     return edges;
+  }
+
+  private void addEdges(Vector from, PathCell reachable, Set<Edge> edges) {
+    Logger.info("    ==> " + reachable);
+    edges.add(new Edge(from, reachable.position(), reachable.steps()));
+    if (canClimb) {
+      // Can walk in the opposite direction as well
+      edges.add(new Edge(reachable.position(), from, reachable.steps()));
+    }
   }
 
   private Set<PathCell> getReachableFrom(PathCell cell) {

@@ -39,4 +39,13 @@ public record Vector3(long x, long y, long z) implements Comparable<Vector3> {
     }
     return comparison;
   }
+
+  @Override
+  public String toString() {
+    return "(" + x + ", " + y + ", " + z + ")";
+  }
+
+  public Vector3 minus(Vector3 d) {
+    return new Vector3(this.x - d.x, this.y - d.y, this.z - d.z);
+  }
 }

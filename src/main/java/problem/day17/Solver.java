@@ -17,11 +17,10 @@ public class Solver {
    */
   public static void main(String[] args) {
     Logger.info("Starting...");
-    Solver solver = new Solver();
-    solver.solve();
+    solve();
   }
 
-  private void solve() {
+  private static void solve() {
     InputFile inputFile = new InputFile("problem17.input");
     if (!inputFile.exists()) {
       Logger.error("Input file not found");

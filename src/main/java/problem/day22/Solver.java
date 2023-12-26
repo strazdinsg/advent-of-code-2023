@@ -38,6 +38,7 @@ public class Solver {
     }
     ground.letBricksFall();
     int removableCount = ground.getRemovableBrickCount();
+    Logger.info("Removable brick count: " + removableCount);
   }
 
   private Brick parseBrick(String line) {

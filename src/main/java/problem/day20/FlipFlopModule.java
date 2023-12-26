@@ -25,7 +25,12 @@ public class FlipFlopModule extends RadioModule {
 
   @Override
   public Signal process() {
-    Signal output = flipped ? (on ? HIGH : LOW) : NONE;
+    Signal output;
+    if (flipped) {
+      output = on ? HIGH : LOW;
+    } else {
+      output = NONE;
+    }
     flipped = false;
     return output;
   }

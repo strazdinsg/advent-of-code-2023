@@ -19,19 +19,19 @@ public class BidirectionalGraph {
   /**
    * Add a bidirectional edge from vertex u to vertex v.
    *
-   * @param u Name of vertex u
-   * @param v Name of vertex v
+   * @param v1 Name of the first vertex
+   * @param v2 Name of the second vertex
    */
-  public void addBidirectionalEdge(String u, String v) {
-    vertices.add(u);
-    vertices.add(v);
-    addEdge(u, v);
-    addEdge(v, u);
+  public void addBidirectionalEdge(String v1, String v2) {
+    vertices.add(v1);
+    vertices.add(v2);
+    addEdge(v1, v2);
+    addEdge(v2, v1);
   }
 
 
   private void addEdge(String u, String v) {
-    Set<String> edges = vertexEdges.computeIfAbsent(u, (k) -> new HashSet<>());
+    Set<String> edges = vertexEdges.computeIfAbsent(u, k -> new HashSet<>());
     edges.add(v);
   }
 
@@ -55,13 +55,13 @@ public class BidirectionalGraph {
   /**
    * Remove edge (u, v) from the graph. If the graph is bidirectional, remove (v, u) as well.
    *
-   * @param u Name of vertex u
-   * @param v Name of vertex v
+   * @param v1 Name of the first vertex
+   * @param v2 Name of the second vertex
    */
-  public void removeEdge(String u, String v) {
-    removeDirectionalEdge(u, v);
+  public void removeEdge(String v1, String v2) {
+    removeDirectionalEdge(v1, v2);
     if (isBidirectional()) {
-      removeDirectionalEdge(v, u);
+      removeDirectionalEdge(v2, v1);
     }
   }
 
@@ -144,7 +144,7 @@ public class BidirectionalGraph {
     BidirectionalGraph residualNetwork = new BidirectionalGraph();
     residualNetwork.vertices.addAll(this.vertices);
     for (var entry : vertexEdges.entrySet()) {
-      residualNetwork.vertexEdges.computeIfAbsent(entry.getKey(), (v) -> new HashSet<>())
+      residualNetwork.vertexEdges.computeIfAbsent(entry.getKey(), v -> new HashSet<>())
           .addAll(entry.getValue());
     }
     return residualNetwork;

@@ -29,11 +29,11 @@ public record Condition(char property, Comparison comparison, int threshold) {
     IntegerRange newRange = null;
     if (comparison == Comparison.GREATER_THAN) {
       if (range.getEnd() > threshold) {
-        long start = Math.max(threshold + 1, range.getStart());
+        long start = Math.max(threshold + 1L, range.getStart());
         newRange = new IntegerRange(start, range.getEnd());
       }
     } else if (range.getStart() < threshold) {
-      long end = Math.min(threshold - 1, range.getEnd());
+      long end = Math.min(threshold - 1L, range.getEnd());
       newRange = new IntegerRange(range.getStart(), end);
     }
     return newRange;

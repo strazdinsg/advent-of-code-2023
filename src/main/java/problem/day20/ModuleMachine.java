@@ -13,7 +13,7 @@ import tools.Logger;
 /**
  * A machine of modules.
  */
-public class Modules {
+public class ModuleMachine {
   public static final String BROADCASTER = "broadcaster";
   public static final char FLIP_FLOP = '%';
   public static final char CONJUNCTION = '&';
@@ -50,7 +50,6 @@ public class Modules {
 
       module.receiveInput(signal.sender(), signal.signal());
       Signal output = module.process();
-      // Logger.info(module.getName() + " - " + output + " -> " + module.getRecipientNameString());
       rememberSignalCount(output, module);
       if (output != NONE) {
         enqueueSignals(module, output);
